@@ -87,7 +87,10 @@ pub fn run(paths: Vec<String>) -> Result<()> {
         serde_json::to_string_pretty(&manifest).context("failed to serialize manifest")?;
     fs::write(vault_dir.join("manifest.json"), manifest_json)
         .context("failed to write manifest.json")?;
-    output::finish_progress(&spinner, &format!("{} files now tracked", manifest.files.len()));
+    output::finish_progress(
+        &spinner,
+        &format!("{} files now tracked", manifest.files.len()),
+    );
     println!(
         "  {} run {} to sync changes to remote",
         style("hint:").dim(),

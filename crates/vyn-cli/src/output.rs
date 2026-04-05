@@ -3,12 +3,24 @@ use console::{Style, Term};
 use indicatif::{ProgressBar, ProgressStyle};
 
 /// Style
-fn s_green_bold() -> Style { Style::new().green().bold() }
-fn s_yellow_bold() -> Style { Style::new().yellow().bold() }
-fn s_red_bold() -> Style { Style::new().red().bold() }
-fn s_cyan_bold() -> Style { Style::new().cyan().bold() }
-fn s_dim() -> Style { Style::new().dim() }
-fn s_bold() -> Style { Style::new().bold() }
+fn s_green_bold() -> Style {
+    Style::new().green().bold()
+}
+fn s_yellow_bold() -> Style {
+    Style::new().yellow().bold()
+}
+fn s_red_bold() -> Style {
+    Style::new().red().bold()
+}
+fn s_cyan_bold() -> Style {
+    Style::new().cyan().bold()
+}
+fn s_dim() -> Style {
+    Style::new().dim()
+}
+fn s_bold() -> Style {
+    Style::new().bold()
+}
 
 /// Banner with a cyan line and the command name in bold
 pub fn print_banner(command: &str) {
@@ -37,10 +49,7 @@ pub fn print_status_deleted(path: &str) {
 }
 
 pub fn print_status_clean() {
-    println!(
-        "\n  {} nothing to push\n",
-        s_green_bold().apply_to("✔")
-    );
+    println!("\n  {} nothing to push\n", s_green_bold().apply_to("✔"));
 }
 
 pub fn print_binary_modified(path: &str, old_size: usize, new_size: usize) {
@@ -135,7 +144,6 @@ pub fn print_info(label: &str, value: &str) {
     println!("  {:<18} {}", s_dim().apply_to(label), value);
 }
 
-
 /// Styled table
 pub fn make_table(headers: &[&str]) -> Table {
     let mut table = Table::new();
@@ -176,4 +184,3 @@ pub fn print_check_row(name: &str, ok: bool, detail: &str) {
         s_dim().apply_to(detail)
     );
 }
-

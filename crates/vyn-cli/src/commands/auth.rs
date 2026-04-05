@@ -47,9 +47,7 @@ pub fn run() -> Result<()> {
 
     println!();
     print_step(3, "Verify SSH key is registered on GitHub");
-    println!(
-        "  vyn encrypts vault invites for you using your GitHub-listed SSH key."
-    );
+    println!("  vyn encrypts vault invites for you using your GitHub-listed SSH key.");
     println!("  Your local key must match one of the keys at:");
     println!("    https://github.com/{username}.keys");
     println!();
@@ -58,8 +56,16 @@ pub fn run() -> Result<()> {
         // Key not on GitHub, print the key and guide the user
         println!("  {} {}", style("✗").red().bold(), e);
         println!();
-        println!("  {} Add your SSH public key to GitHub:", style("→").cyan().bold());
-        println!("    1. Go to  {}", style("https://github.com/settings/keys").cyan().underlined());
+        println!(
+            "  {} Add your SSH public key to GitHub:",
+            style("→").cyan().bold()
+        );
+        println!(
+            "    1. Go to  {}",
+            style("https://github.com/settings/keys")
+                .cyan()
+                .underlined()
+        );
         println!("    2. Click  'New SSH key'");
         println!("    3. Paste the following key (select all, copy, paste into the 'Key' field):");
         println!();
@@ -98,7 +104,8 @@ pub fn run() -> Result<()> {
         output::print_info("Relay", &format!("identity registered on {relay_url}"));
     }
     println!();
-    println!("  You are ready to use  {} and {}.",
+    println!(
+        "  You are ready to use  {} and {}.",
         style("vyn share").cyan(),
         style("vyn link").cyan()
     );
@@ -201,10 +208,16 @@ fn try_oauth_device_flow_username() -> Result<String> {
         style("→").cyan().bold()
     );
     println!();
-    println!("    URL   {}", style(&code.verification_uri).cyan().underlined());
+    println!(
+        "    URL   {}",
+        style(&code.verification_uri).cyan().underlined()
+    );
     println!("    Code  {}", style(&code.user_code).yellow().bold());
     println!();
-    println!("  Waiting for authorization… (code expires at {})", expiry_time(code.expires_in));
+    println!(
+        "  Waiting for authorization… (code expires at {})",
+        expiry_time(code.expires_in)
+    );
     let _ = try_open_browser(&code.verification_uri);
 
     let max_wait = Duration::from_secs(code.expires_in);
@@ -251,9 +264,9 @@ fn try_oauth_device_flow_username() -> Result<String> {
                 poll_interval += Duration::from_secs(5);
                 continue;
             }
-            Some("expired_token") => anyhow::bail!(
-                "Authorization timed out. Run `vyn auth` again to restart the flow."
-            ),
+            Some("expired_token") => {
+                anyhow::bail!("Authorization timed out. Run `vyn auth` again to restart the flow.")
+            }
             Some("access_denied") => {
                 anyhow::bail!("Authorization was cancelled by the user.")
             }
@@ -299,8 +312,6 @@ fn try_open_browser(url: &str) -> Result<()> {
 
     anyhow::bail!("unable to open browser automatically")
 }
-
-
 
 fn detect_ssh_private_key() -> Result<PathBuf> {
     let home = std::env::var("HOME").context("HOME environment variable is not set")?;
@@ -408,9 +419,12 @@ fn run_ssh_ownership_challenge(
     );
     let sign_status = Command::new("ssh-keygen")
         .args([
-            "-Y", "sign",
-            "-f", private_key_path.to_str().context("non-UTF-8 key path")?,
-            "-n", "vyn-auth",
+            "-Y",
+            "sign",
+            "-f",
+            private_key_path.to_str().context("non-UTF-8 key path")?,
+            "-n",
+            "vyn-auth",
             challenge_path.to_str().unwrap(),
         ])
         .stdout(Stdio::null())
@@ -441,11 +455,16 @@ fn run_ssh_ownership_challenge(
         fs::File::open(&challenge_path).context("failed to open challenge for verification")?;
     let verify_output = Command::new("ssh-keygen")
         .args([
-            "-Y", "verify",
-            "-f", signers_path.to_str().unwrap(),
-            "-n", "vyn-auth",
-            "-I", &principal,
-            "-s", sig_path.to_str().unwrap(),
+            "-Y",
+            "verify",
+            "-f",
+            signers_path.to_str().unwrap(),
+            "-n",
+            "vyn-auth",
+            "-I",
+            &principal,
+            "-s",
+            sig_path.to_str().unwrap(),
         ])
         .stdin(challenge_file)
         .stdout(Stdio::null())

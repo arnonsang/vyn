@@ -28,7 +28,10 @@ pub fn run(user: String) -> Result<()> {
     let spinner = output::new_spinner(&format!("fetching SSH keys for @{username}…"));
     let public_keys = fetch_github_public_keys(&username)?;
     if public_keys.is_empty() {
-        output::fail_progress(&spinner, &format!("no SSH public keys found for @{username}"));
+        output::fail_progress(
+            &spinner,
+            &format!("no SSH public keys found for @{username}"),
+        );
         anyhow::bail!("no SSH public keys found for @{username}");
     }
     output::finish_progress(&spinner, &format!("{} SSH key(s) found", public_keys.len()));
@@ -50,9 +53,14 @@ pub fn run(user: String) -> Result<()> {
         anyhow::bail!("unable to encrypt invites with any of @{username}'s SSH public keys");
     }
 
-    output::print_success(&format!("created {created} encrypted invite(s) for @{username}"));
+    output::print_success(&format!(
+        "created {created} encrypted invite(s) for @{username}"
+    ));
     output::print_info("vault id", &vault_id);
-    output::print_info("next step", "send the .age file(s) in .vyn/invites/ to the recipient");
+    output::print_info(
+        "next step",
+        "send the .age file(s) in .vyn/invites/ to the recipient",
+    );
     println!();
     Ok(())
 }

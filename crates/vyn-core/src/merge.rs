@@ -13,9 +13,9 @@ pub enum BinaryMergeDecision {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum Op {
-    Kept(String),    // side kept the base line unchanged
-    Changed(String), // side replaced the base line with new content
-    Deleted,         // side deleted the base line
+    Kept(String),     // side kept the base line unchanged
+    Changed(String),  // side replaced the base line with new content
+    Deleted,          // side deleted the base line
     Inserted(String), // side inserted a line with no base counterpart
 }
 
@@ -56,14 +56,10 @@ pub fn merge_text(base: &str, local: &str, remote: &str) -> MergeOutcome {
             (None, Some(Op::Inserted(rs))) => merged.push(rs.clone()),
 
             // Both inserted identical content
-            (Some(Op::Inserted(ls)), Some(Op::Inserted(rs))) if ls == rs => {
-                merged.push(ls.clone())
-            }
+            (Some(Op::Inserted(ls)), Some(Op::Inserted(rs))) if ls == rs => merged.push(ls.clone()),
 
             // Both changed to the same value -- clean
-            (Some(Op::Changed(ls)), Some(Op::Changed(rs))) if ls == rs => {
-                merged.push(ls.clone())
-            }
+            (Some(Op::Changed(ls)), Some(Op::Changed(rs))) if ls == rs => merged.push(ls.clone()),
 
             // Both deleted
             (Some(Op::Deleted), Some(Op::Deleted)) => {}
@@ -79,16 +75,12 @@ pub fn merge_text(base: &str, local: &str, remote: &str) -> MergeOutcome {
                 has_conflict = true;
                 merged.push("<<<<<<< LOCAL".to_string());
                 match l {
-                    Some(Op::Kept(s) | Op::Changed(s) | Op::Inserted(s)) => {
-                        merged.push(s.clone())
-                    }
+                    Some(Op::Kept(s) | Op::Changed(s) | Op::Inserted(s)) => merged.push(s.clone()),
                     Some(Op::Deleted) | None => {}
                 }
                 merged.push("=======".to_string());
                 match r {
-                    Some(Op::Kept(s) | Op::Changed(s) | Op::Inserted(s)) => {
-                        merged.push(s.clone())
-                    }
+                    Some(Op::Kept(s) | Op::Changed(s) | Op::Inserted(s)) => merged.push(s.clone()),
                     Some(Op::Deleted) | None => {}
                 }
                 merged.push(">>>>>>> REMOTE".to_string());

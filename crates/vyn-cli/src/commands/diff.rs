@@ -53,7 +53,7 @@ pub fn run(file: Option<String>) -> Result<()> {
                     &old_entry.sha256,
                     key.as_ref().expect("key required for baseline diff"),
                 )
-                    .with_context(|| format!("failed to decrypt baseline blob for {path}"))?,
+                .with_context(|| format!("failed to decrypt baseline blob for {path}"))?,
             ),
             None => None,
         };

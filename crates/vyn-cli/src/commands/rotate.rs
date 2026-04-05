@@ -68,12 +68,10 @@ pub fn run() -> Result<()> {
             let abs_path = root.join(&entry.path);
             let blob_file = make_blob_path(&blobs_dir, &entry.sha256);
             // Always re-encrypt with new_key
-            encrypt_file_to_blob(&abs_path, &blobs_dir, &new_key).with_context(|| {
-                format!("failed to encrypt blob {}", entry.sha256)
-            })?;
-            let bytes = fs::read(&blob_file).with_context(|| {
-                format!("failed to read encrypted blob {}", entry.sha256)
-            })?;
+            encrypt_file_to_blob(&abs_path, &blobs_dir, &new_key)
+                .with_context(|| format!("failed to encrypt blob {}", entry.sha256))?;
+            let bytes = fs::read(&blob_file)
+                .with_context(|| format!("failed to read encrypted blob {}", entry.sha256))?;
             provider
                 .upload_blob(&entry.sha256, bytes)
                 .await

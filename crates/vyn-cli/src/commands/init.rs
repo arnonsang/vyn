@@ -14,19 +14,47 @@ use walkdir::WalkDir;
 
 use crate::output;
 
-
 /// Patterns that strongly suggest secrets / config (candidate for vyn tracking).
 const SECRET_HINTS: &[&str] = &[
-    ".env", "secret", "credential", "passwd", "password", "token",
-    ".pem", ".key", ".p12", ".pfx", ".crt", ".cert", "id_rsa", "id_ed25519",
-    "config", "settings", "keystore", ".kubeconfig", ".kube",
+    ".env",
+    "secret",
+    "credential",
+    "passwd",
+    "password",
+    "token",
+    ".pem",
+    ".key",
+    ".p12",
+    ".pfx",
+    ".crt",
+    ".cert",
+    "id_rsa",
+    "id_ed25519",
+    "config",
+    "settings",
+    "keystore",
+    ".kubeconfig",
+    ".kube",
 ];
 
 /// Patterns that strongly suggest build artifacts (should stay ignored by vyn).
 const ARTIFACT_HINTS: &[&str] = &[
-    "node_modules", "target", "dist", "build", "vendor", "__pycache__",
-    ".cache", ".gradle", ".m2", "*.o", "*.class", "*.pyc", "*.log",
-    "*.lock", "Thumbs.db", ".DS_Store",
+    "node_modules",
+    "target",
+    "dist",
+    "build",
+    "vendor",
+    "__pycache__",
+    ".cache",
+    ".gradle",
+    ".m2",
+    "*.o",
+    "*.class",
+    "*.pyc",
+    "*.log",
+    "*.lock",
+    "Thumbs.db",
+    ".DS_Store",
 ];
 
 fn looks_like_secret(pattern: &str) -> bool {
@@ -53,7 +81,9 @@ fn make_row(pattern: &str, files: &[String]) -> String {
 fn files_matched_by_pattern(root: &Path, pattern: &str) -> Vec<String> {
     let mut builder = GitignoreBuilder::new(root);
     builder.add_line(None, pattern).ok();
-    let Ok(gi) = builder.build() else { return vec![] };
+    let Ok(gi) = builder.build() else {
+        return vec![];
+    };
 
     WalkDir::new(root)
         .into_iter()
@@ -61,9 +91,9 @@ fn files_matched_by_pattern(root: &Path, pattern: &str) -> Vec<String> {
         .filter(|e| {
             let p = e.path();
             // skip .git and .vyn
-            if p.components().any(|c| {
-                matches!(c.as_os_str().to_str(), Some(".git") | Some(".vyn"))
-            }) {
+            if p.components()
+                .any(|c| matches!(c.as_os_str().to_str(), Some(".git") | Some(".vyn")))
+            {
                 return false;
             }
             let is_dir = e.file_type().is_dir();
@@ -118,7 +148,10 @@ pub fn run(name: Option<String>) -> Result<()> {
     let spinner2 = output::new_spinner("scanning files…");
     let matcher = load_ignore_matcher(&root).context("failed to load ignore matcher")?;
     let manifest = capture_manifest(&root, &matcher).context("failed to capture local manifest")?;
-    output::finish_progress(&spinner2, &format!("{} files indexed", manifest.files.len()));
+    output::finish_progress(
+        &spinner2,
+        &format!("{} files indexed", manifest.files.len()),
+    );
 
     let manifest_path = vault_dir.join("manifest.json");
     let manifest_json =
@@ -216,7 +249,10 @@ fn write_vynignore_interactive(root: &Path, vynignore_path: &Path) -> Result<()>
         println!("  {hint}");
         println!();
 
-        let items: Vec<String> = secret_candidates.iter().map(|(p, files)| make_row(p, files)).collect();
+        let items: Vec<String> = secret_candidates
+            .iter()
+            .map(|(p, files)| make_row(p, files))
+            .collect();
         let defaults = vec![true; items.len()];
 
         let sel = MultiSelect::new()
@@ -241,7 +277,10 @@ fn write_vynignore_interactive(root: &Path, vynignore_path: &Path) -> Result<()>
         println!("  {hint}");
         println!();
 
-        let items: Vec<String> = other_candidates.iter().map(|(p, files)| make_row(p, files)).collect();
+        let items: Vec<String> = other_candidates
+            .iter()
+            .map(|(p, files)| make_row(p, files))
+            .collect();
         let defaults = vec![false; items.len()];
 
         let sel = MultiSelect::new()
@@ -276,7 +315,10 @@ fn write_vynignore_interactive(root: &Path, vynignore_path: &Path) -> Result<()>
 
     println!();
     if tracked_patterns.is_empty() {
-        output::print_info(".vynignore", "all git-ignored files excluded (nothing tracked)");
+        output::print_info(
+            ".vynignore",
+            "all git-ignored files excluded (nothing tracked)",
+        );
     } else {
         output::print_info(
             ".vynignore",

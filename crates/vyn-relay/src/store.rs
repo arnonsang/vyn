@@ -279,9 +279,7 @@ pub fn sanitize_id(input: &str) -> Result<String> {
         .chars()
         .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.'))
     {
-        anyhow::bail!(
-            "identifier contains invalid characters (allowed: a-z A-Z 0-9 - _ .)"
-        );
+        anyhow::bail!("identifier contains invalid characters (allowed: a-z A-Z 0-9 - _ .)");
     }
     Ok(input.to_string())
 }

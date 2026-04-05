@@ -2,8 +2,8 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 use std::sync::Arc;
 
-use tonic::metadata::MetadataValue;
 use tonic::Request;
+use tonic::metadata::MetadataValue;
 use tonic::transport::{Channel, Endpoint};
 
 use crate::storage::{StorageError, StorageProvider, StorageResult};
@@ -105,10 +105,8 @@ impl RelayStorageProvider {
         private_key_path: &str,
     ) -> StorageResult<()> {
         let registration_payload = format!("vyn-register:{user_id}:{public_key}");
-        let signature = sign_nonce_with_ssh_key(
-            registration_payload.as_bytes(),
-            Path::new(private_key_path),
-        )?;
+        let signature =
+            sign_nonce_with_ssh_key(registration_payload.as_bytes(), Path::new(private_key_path))?;
 
         let mut client = self.connect().await?;
         client
@@ -264,13 +262,19 @@ fn load_identity(vault_dir: &Path) -> StorageResult<IdentityConfig> {
     let path = vault_dir.join("identity.toml");
     let text = std::fs::read_to_string(&path)
         .map_err(|e| StorageError::Transport(format!("failed to read identity.toml: {e}")))?;
-    let github_username = parse_toml_string(&text, "github_username")
-        .ok_or_else(|| StorageError::Transport("missing github_username in identity.toml".into()))?;
-    let ssh_private_key = parse_toml_string(&text, "ssh_private_key")
-        .ok_or_else(|| StorageError::Transport("missing ssh_private_key in identity.toml".into()))?;
+    let github_username = parse_toml_string(&text, "github_username").ok_or_else(|| {
+        StorageError::Transport("missing github_username in identity.toml".into())
+    })?;
+    let ssh_private_key = parse_toml_string(&text, "ssh_private_key").ok_or_else(|| {
+        StorageError::Transport("missing ssh_private_key in identity.toml".into())
+    })?;
     let ssh_public_key = parse_toml_string(&text, "ssh_public_key")
         .ok_or_else(|| StorageError::Transport("missing ssh_public_key in identity.toml".into()))?;
-    Ok(IdentityConfig { github_username, ssh_private_key, ssh_public_key })
+    Ok(IdentityConfig {
+        github_username,
+        ssh_private_key,
+        ssh_public_key,
+    })
 }
 
 fn parse_toml_string(text: &str, key: &str) -> Option<String> {
@@ -294,9 +298,12 @@ fn sign_nonce_with_ssh_key(nonce: &[u8], private_key: &Path) -> StorageResult<St
 
     let status = Command::new("ssh-keygen")
         .args([
-            "-Y", "sign",
-            "-f", private_key.to_str().unwrap_or(""),
-            "-n", "vyn",
+            "-Y",
+            "sign",
+            "-f",
+            private_key.to_str().unwrap_or(""),
+            "-n",
+            "vyn",
             nonce_file.to_str().unwrap_or(""),
         ])
         .stdout(Stdio::null())

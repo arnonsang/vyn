@@ -62,12 +62,12 @@ pub fn run(vault_id: String) -> Result<()> {
 
     // Update config.toml to point at the linked vault id so push/pull work immediately
     let config_path = root.join(".vyn").join("config.toml");
-    if let Ok(text) = fs::read_to_string(&config_path) {
-        if let Ok(mut cfg) = toml::from_str::<VaultConfig>(&text) {
-            cfg.vault_id = vault_id.clone();
-            if let Ok(serialized) = toml::to_string_pretty(&cfg) {
-                let _ = fs::write(&config_path, serialized);
-            }
+    if let Ok(text) = fs::read_to_string(&config_path)
+        && let Ok(mut cfg) = toml::from_str::<VaultConfig>(&text)
+    {
+        cfg.vault_id = vault_id.clone();
+        if let Ok(serialized) = toml::to_string_pretty(&cfg) {
+            let _ = fs::write(&config_path, serialized);
         }
     }
 

@@ -3,8 +3,8 @@ use std::path::Path;
 use std::sync::OnceLock;
 
 use anyhow::{Context, Result};
-use serde::Deserialize;
 use secrecy::ExposeSecret;
+use serde::Deserialize;
 use vyn_core::blob::{blob_path as make_blob_path, decrypt_blob_bytes};
 use vyn_core::keychain::load_project_key;
 use vyn_core::relay_storage::RelayStorageProvider;
@@ -66,7 +66,10 @@ pub fn run() -> Result<()> {
             .with_context(|| format!("no remote manifest found for vault {}", vault_id))?;
         let manifest =
             decrypt_manifest(&payload, &key).context("failed to decrypt remote manifest")?;
-        output::finish_progress(&spinner, &format!("{} files in manifest", manifest.files.len()));
+        output::finish_progress(
+            &spinner,
+            &format!("{} files in manifest", manifest.files.len()),
+        );
 
         let blobs_dir = root.join(".vyn").join("blobs");
         fs::create_dir_all(&blobs_dir).context("failed to create blobs directory")?;

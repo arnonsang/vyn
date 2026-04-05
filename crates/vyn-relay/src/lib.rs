@@ -5,9 +5,9 @@ pub mod store;
 use std::net::SocketAddr;
 
 use anyhow::{Context, Result};
-use tonic::transport::Server;
 use tokio::net::TcpListener;
 use tokio_stream::wrappers::TcpListenerStream;
+use tonic::transport::Server;
 
 pub mod proto {
     tonic::include_proto!("vyn");

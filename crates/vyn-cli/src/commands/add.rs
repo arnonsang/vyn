@@ -60,10 +60,10 @@ pub fn run(paths: Vec<String>) -> Result<()> {
             }
             let mut builder = GitignoreBuilder::new(&root);
             builder.add_line(None, trimmed).ok();
-            if let Ok(gi) = builder.build() {
-                if gi.matched(&target, is_dir).is_ignore() {
-                    culprits.push(i);
-                }
+            if let Ok(gi) = builder.build()
+                && gi.matched(&target, is_dir).is_ignore()
+            {
+                culprits.push(i);
             }
         }
 
@@ -117,10 +117,10 @@ pub fn run(paths: Vec<String>) -> Result<()> {
             }
             let mut builder = GitignoreBuilder::new(&root);
             builder.add_line(None, trimmed).ok();
-            if let Ok(gi) = builder.build() {
-                if gi.matched(&target, is_dir).is_ignore() {
-                    remove_indices.insert(i);
-                }
+            if let Ok(gi) = builder.build()
+                && gi.matched(&target, is_dir).is_ignore()
+            {
+                remove_indices.insert(i);
             }
         }
     }
@@ -144,7 +144,10 @@ pub fn run(paths: Vec<String>) -> Result<()> {
         serde_json::to_string_pretty(&manifest).context("failed to serialize manifest")?;
     fs::write(vault_dir.join("manifest.json"), manifest_json)
         .context("failed to write manifest.json")?;
-    output::finish_progress(&spinner, &format!("{} files now tracked", manifest.files.len()));
+    output::finish_progress(
+        &spinner,
+        &format!("{} files now tracked", manifest.files.len()),
+    );
     println!(
         "  {} run {} to sync changes to remote",
         style("hint:").dim(),

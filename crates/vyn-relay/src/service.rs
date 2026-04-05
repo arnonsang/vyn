@@ -17,10 +17,12 @@ use crate::store::{FileStore, sanitize_id};
 
 const CHALLENGE_TTL: Duration = Duration::from_secs(60);
 
+type ChallengeMap = Arc<RwLock<HashMap<String, (Vec<u8>, Instant)>>>;
+
 #[derive(Clone)]
 pub struct RelayService {
     store: FileStore,
-    challenges: Arc<RwLock<HashMap<String, (Vec<u8>, Instant)>>>,
+    challenges: ChallengeMap,
     sessions: Arc<RwLock<HashSet<String>>>,
 }
 
@@ -34,6 +36,7 @@ impl RelayService {
     }
 }
 
+#[allow(clippy::result_large_err)]
 fn require_auth<T>(request: &Request<T>, sessions: &HashSet<String>) -> Result<(), Status> {
     // When the test-bypass-auth feature is enabled, allow a magic token so
     // integration tests can exercise storage without a real SSH key setup.

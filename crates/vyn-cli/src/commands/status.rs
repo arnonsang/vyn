@@ -92,8 +92,12 @@ pub fn run(verbose: bool) -> Result<()> {
                 .get(path)
                 .with_context(|| format!("missing old manifest entry for {path}"))?;
 
-            let baseline = decrypt_blob_by_hash(&blobs_dir, &old_entry.sha256, key.as_ref().expect("key required for changed file"))
-                .with_context(|| format!("failed to decrypt baseline blob for {path}"))?;
+            let baseline = decrypt_blob_by_hash(
+                &blobs_dir,
+                &old_entry.sha256,
+                key.as_ref().expect("key required for changed file"),
+            )
+            .with_context(|| format!("failed to decrypt baseline blob for {path}"))?;
             let new_data = fs::read(root.join(path))
                 .with_context(|| format!("failed to read local file for diff: {path}"))?;
 
@@ -118,8 +122,12 @@ pub fn run(verbose: bool) -> Result<()> {
             let old_entry = old_by_path
                 .get(path)
                 .with_context(|| format!("missing old manifest entry for {path}"))?;
-            let baseline = decrypt_blob_by_hash(&blobs_dir, &old_entry.sha256, key.as_ref().expect("key required for deleted file"))
-                .with_context(|| format!("failed to decrypt baseline blob for {path}"))?;
+            let baseline = decrypt_blob_by_hash(
+                &blobs_dir,
+                &old_entry.sha256,
+                key.as_ref().expect("key required for deleted file"),
+            )
+            .with_context(|| format!("failed to decrypt baseline blob for {path}"))?;
 
             output::print_diff_header(path);
             if is_binary(baseline.expose_secret()) {
