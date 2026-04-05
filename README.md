@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo_light_transparent.png" alt="vyn logo" width="200" />
+  <img src="assets/logo_light_transparent.png" alt="vyn logo" width="100" />
   <br />
   <h1 align="center">vyn</h1>
   <p align="center">Encrypted env/config sync CLI for teams. Helps you encrypt, sync, diff, share, and run environment/config files with a local-first workflow and optional relay/S3 storage.</p>
@@ -23,6 +23,20 @@
 - Self-hosted relay server with optional S3 mirroring
 - P2P module available in vyn-core (not yet exposed via CLI)
 
+## Table of Contents
+
+- [Project Layout](#project-layout)
+- [Install](#install)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [Relay Deployment](#relay-deployment)
+- [Relay Backend Modes](#relay-backend-modes)
+- [Command Reference](#command-reference)
+- [How It Works](#how-it-works)
+- [Environment Variables](#environment-variables)
+- [Security Notes](#security-notes)
+- [Current Status](#current-status)
+
 ## Project Layout
 
 - `crates/vyn-core`: crypto, keychain, manifest, storage, diff/merge, p2p
@@ -32,16 +46,14 @@
 
 ## Install
 
-### Option A: Build from source
+### Option A: Install from crates.io (recommended)
 
 ```bash
-git clone https://github.com/arnonsang/vyn.git
-cd vyn
-cargo build --release --bin vyn
-./target/release/vyn --help
+cargo install vyn-cli
+vyn --help
 ```
 
-### Option B: Cargo install from local clone
+### Option B: Build from source
 
 ```bash
 git clone https://github.com/arnonsang/vyn.git
@@ -53,14 +65,15 @@ vyn --help
 ## Quick Start
 
 ```bash
-# 1. Initialize a vault (fails if already initialized)
+# 1. Initialize a vault
 vyn init my-project
 
-# 2. Authenticate: GitHub OAuth Device Flow + SSH key verification
-vyn auth
-
-# 3. Configure storage
+# 2. Configure storage (do this before auth if using relay — auth registers your identity on the relay)
 vyn config
+
+# 3. Authenticate: GitHub OAuth Device Flow + SSH key verification
+#    If relay storage is configured, your identity is registered on the relay automatically.
+vyn auth
 
 # 4. Push encrypted state
 vyn push
@@ -131,7 +144,7 @@ vyn serve --relay \
 ### 2. Run via Docker
 
 ```bash
-docker run --rm -p 50051:50051 -v vyn-relay-data:/data vyn-relay:latest \
+docker run --rm -p 50051:50051 -v vyn-relay-data:/data ghcr.io/arnonsang/vyn-relay:latest \
   --relay --port 50051 --data-dir /data
 ```
 
@@ -143,7 +156,7 @@ docker run --rm -p 50051:50051 -v vyn-relay-data:/data \
   -e VYN_RELAY_DATA_DIR=/data \
   -e VYN_RELAY_S3_BUCKET=my-vyn-bucket \
   -e VYN_RELAY_S3_REGION=us-east-1 \
-  vyn-relay:latest --relay
+  ghcr.io/arnonsang/vyn-relay:latest --relay
 ```
 
 ### 3. Run via Docker Compose
@@ -190,9 +203,9 @@ server {
 
 Set `relay_url = "https://relay.example.com"` in `.vyn/config.toml`.
 
-**Option B: Tonic built-in TLS**
+**Option B: Tonic built-in TLS** *(coming soon)*
 
-If you prefer terminating TLS inside the relay process, modify `serve_with_config` in `crates/vyn-relay/src/lib.rs` to call `.tls_config(ServerTlsConfig::new().identity(Identity::from_pem(cert, key)))` on the `Server::builder()` before `add_service`. See the tonic docs for `tonic::transport::ServerTlsConfig`.
+Support for native TLS termination inside the relay process is on the roadmap. In the meantime, if you'd prefer not to use a reverse proxy, you're welcome to clone the repo and add `.tls_config(ServerTlsConfig::new().identity(Identity::from_pem(cert, key)))` to the `Server::builder()` in `crates/vyn-relay/src/lib.rs`. The [tonic docs](https://docs.rs/tonic/latest/tonic/transport/struct.ServerTlsConfig.html) have more details.
 
 ## Relay Backend Modes
 

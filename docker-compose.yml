@@ -1,9 +1,6 @@
 services:
   vyn-relay:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: vyn-relay:latest
+    image: ghcr.io/arnonsang/vyn-relay:latest
     container_name: vyn-relay
     restart: unless-stopped
     environment:
