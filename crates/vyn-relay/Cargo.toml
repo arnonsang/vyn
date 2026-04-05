@@ -1,0 +1,28 @@
+[package]
+name = "vyn-relay"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "gRPC relay server library for vyn with optional S3 mirroring"
+
+[build-dependencies]
+protoc-bin-vendored = "3"
+tonic-build.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+aws-config.workspace = true
+aws-sdk-s3.workspace = true
+serde.workspace = true
+ring.workspace = true
+tokio.workspace = true
+tokio-stream = { version = "0.1", features = ["net"] }
+tonic.workspace = true
+prost.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+tempfile = "3"
+
+[features]
+test-bypass-auth = []

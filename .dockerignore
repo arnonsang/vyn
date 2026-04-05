@@ -1,0 +1,6 @@
+.git
+.vscode
+.vyn
+target
+**/target
+**/*.log

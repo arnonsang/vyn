@@ -1,0 +1,18 @@
+# vyn ignore rules example, processed by `ignore` crate
+
+## Ignore local artifacts and build outputs
+.vyn/
+.git/
+target/
+
+## Common local env files you may not want to sync
+.env.local
+.env.*.local
+
+## Temporary files
+*.tmp
+*.swp
+ 
+ ## Dir
+ crates/
+ proto/

@@ -1,0 +1,42 @@
+[workspace]
+members = [
+    "crates/vyn-core",
+    "crates/vyn-cli",
+    "crates/vyn-relay",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+version = "0.1.0"
+repository = "https://github.com/arnonsang/vyn"
+
+[workspace.dependencies]
+age = "0.11"
+anyhow = "1"
+aws-config = "1"
+aws-sdk-s3 = "1"
+clap = { version = "4", features = ["derive"] }
+comfy-table = "7"
+console = "0.15"
+dialoguer = "0.11"
+indicatif = "0.17"
+ignore = "0.4"
+keyring = { version = "3", features = ["linux-native"] }
+libp2p = { version = "0.55", features = ["tokio", "tcp", "noise", "yamux", "gossipsub", "mdns", "kad", "identify", "ping", "macros"] }
+prost = "0.13"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+ring = "0.17"
+secrecy = "0.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+similar = "2"
+thiserror = "2"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "fs", "sync", "io-util", "process"] }
+toml = "0.8"
+tonic = { version = "0.12", features = ["transport"] }
+tonic-build = "0.12"
+uuid = { version = "1", features = ["v4", "serde"] }
+walkdir = "2"

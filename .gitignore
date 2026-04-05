@@ -1,0 +1,14 @@
+# target
+target/
+
+# vyn files
+.vyn/
+.vynignore.local
+
+# local
+*.local.*
+docs/local/
+
+# workspace
+.devcontainer/
+.vscode/
