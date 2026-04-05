@@ -1,0 +1,1378 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>vyn</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="getting-started/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="getting-started/quick-start.html"><strong aria-hidden="true">2.</strong> Quick Start</a></li><li class="chapter-item expanded affix "><li class="part-title">Core Concepts</li><li class="chapter-item expanded "><a href="concepts/overview.html"><strong aria-hidden="true">3.</strong> How Vyn Works</a></li><li class="chapter-item expanded "><a href="concepts/vault.html"><strong aria-hidden="true">4.</strong> Vault Structure</a></li><li class="chapter-item expanded "><a href="concepts/encryption.html"><strong aria-hidden="true">5.</strong> Encryption & Keys</a></li><li class="chapter-item expanded "><a href="concepts/manifests-blobs.html"><strong aria-hidden="true">6.</strong> Manifests & Blobs</a></li><li class="chapter-item expanded affix "><li class="part-title">CLI Reference</li><li class="chapter-item expanded "><a href="cli/init.html"><strong aria-hidden="true">7.</strong> vyn init</a></li><li class="chapter-item expanded "><a href="cli/auth.html"><strong aria-hidden="true">8.</strong> vyn auth</a></li><li class="chapter-item expanded "><a href="cli/config.html"><strong aria-hidden="true">9.</strong> vyn config</a></li><li class="chapter-item expanded "><a href="cli/push-pull.html"><strong aria-hidden="true">10.</strong> vyn push / pull</a></li><li class="chapter-item expanded "><a href="cli/status-diff.html"><strong aria-hidden="true">11.</strong> vyn st / diff</a></li><li class="chapter-item expanded "><a href="cli/share-link.html"><strong aria-hidden="true">12.</strong> vyn share / link</a></li><li class="chapter-item expanded "><a href="cli/add-del.html"><strong aria-hidden="true">13.</strong> vyn add / del</a></li><li class="chapter-item expanded "><a href="cli/utility.html"><strong aria-hidden="true">14.</strong> Utility Commands</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="configuration/files.html"><strong aria-hidden="true">15.</strong> Config Files</a></li><li class="chapter-item expanded "><a href="configuration/env-vars.html"><strong aria-hidden="true">16.</strong> Environment Variables</a></li><li class="chapter-item expanded affix "><li class="part-title">Key Management</li><li class="chapter-item expanded "><a href="key-management/architecture.html"><strong aria-hidden="true">17.</strong> Key Architecture</a></li><li class="chapter-item expanded "><a href="key-management/sharing.html"><strong aria-hidden="true">18.</strong> Sharing Keys</a></li><li class="chapter-item expanded "><a href="key-management/rotation.html"><strong aria-hidden="true">19.</strong> Key Rotation</a></li><li class="chapter-item expanded affix "><li class="part-title">Self-Hosting the Relay</li><li class="chapter-item expanded "><a href="relay/overview.html"><strong aria-hidden="true">20.</strong> Overview</a></li><li class="chapter-item expanded "><a href="relay/docker.html"><strong aria-hidden="true">21.</strong> Docker Deployment</a></li><li class="chapter-item expanded "><a href="relay/storage-backends.html"><strong aria-hidden="true">22.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="relay/reference.html"><strong aria-hidden="true">23.</strong> Reference</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="architecture/overview.html"><strong aria-hidden="true">24.</strong> System Design</a></li><li class="chapter-item expanded "><a href="architecture/crates.html"><strong aria-hidden="true">25.</strong> Crate Structure</a></li><li class="chapter-item expanded "><a href="architecture/protocol.html"><strong aria-hidden="true">26.</strong> gRPC Protocol</a></li><li class="chapter-item expanded "><a href="architecture/contributing.html"><strong aria-hidden="true">27.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">API Reference</li><li class="chapter-item expanded "><a href="api.html"><strong aria-hidden="true">28.</strong> Crate Docs</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">vyn</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/arnonsang/vyn" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="vyn"><a class="header" href="#vyn">vyn</a></h1>
+<p><strong>vyn</strong> (En<strong>v</strong> + S<strong>yn</strong>c) is an encrypted env/config sync CLI for teams. It helps you encrypt, sync, diff, share, and run environment and configuration files with a local-first workflow and optional relay or S3 storage.</p>
+<p><a href="https://crates.io/crates/vyn-cli"><img src="https://img.shields.io/crates/v/vyn-cli?label=vyn-cli&amp;color=fc8d62" alt="crates.io vyn-cli" /></a>
+<a href="https://crates.io/crates/vyn-core"><img src="https://img.shields.io/crates/v/vyn-core?label=vyn-core&amp;color=7fc97f" alt="crates.io vyn-core" /></a>
+<a href="https://crates.io/crates/vyn-relay"><img src="https://img.shields.io/crates/v/vyn-relay?label=vyn-relay&amp;color=beaed4" alt="crates.io vyn-relay" /></a>
+<a href="https://github.com/arnonsang/vyn/actions"><img src="https://img.shields.io/github/actions/workflow/status/arnonsang/vyn/ci.yml?label=CI" alt="CI" /></a>
+<a href="https://github.com/arnonsang/vyn/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="license" /></a></p>
+<h2 id="highlights"><a class="header" href="#highlights">Highlights</a></h2>
+<ul>
+<li><strong>AES-256-GCM encryption</strong> — all blobs and manifests are encrypted before leaving the machine</li>
+<li><strong>GitHub OAuth Device Flow</strong> — passwordless identity, no manual username entry</li>
+<li><strong>SSH-based key sharing</strong> — invite teammates via <a href="https://age-encryption.org">age</a> using their GitHub SSH public keys</li>
+<li><strong>Local vault</strong> — all metadata lives in <code>.vyn/</code> and is never committed to Git</li>
+<li><strong>Diff &amp; status</strong> — file-level and line-level diff against the encrypted baseline</li>
+<li><strong>Self-hosted relay</strong> — run your own gRPC relay server with optional S3 mirroring</li>
+<li><strong>P2P stub</strong> — <code>libp2p</code> module compiled into <code>vyn-core</code>, not yet CLI-exposed</li>
+</ul>
+<h2 id="project-layout"><a class="header" href="#project-layout">Project Layout</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Crate</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>vyn-core</code></td><td>Crypto, keychain, manifest, storage, diff/merge, p2p</td></tr>
+<tr><td><code>vyn-cli</code></td><td>End-user CLI command surface</td></tr>
+<tr><td><code>vyn-relay</code></td><td>gRPC relay service implementation</td></tr>
+<tr><td><code>proto/vyn.proto</code></td><td>Relay API contract (canonical source)</td></tr>
+</tbody></table>
+</div>
+<h2 id="current-status"><a class="header" href="#current-status">Current Status</a></h2>
+<p>Full MVP command set is implemented and tested:</p>
+<ul>
+<li>Local vault lifecycle: <code>init</code>, <code>st</code>, <code>diff</code>, <code>config</code>, <code>doctor</code></li>
+<li>Sync: <code>push</code>, <code>pull</code>, <code>history</code></li>
+<li>Identity + sharing: <code>auth</code> (OAuth + SSH verify), <code>share</code>, <code>link</code></li>
+<li>Env management: <code>run</code>, <code>check</code></li>
+<li>Relay server: <code>serve</code> with local and S3-mirror backends</li>
+<li>Docker / Docker Compose deployment ready</li>
+</ul>
+<p>The P2P module (<code>vyn-core::p2p</code>) is compiled into the library but not yet exposed via CLI.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<h2 id="option-a-install-from-cratesio-recommended"><a class="header" href="#option-a-install-from-cratesio-recommended">Option A: Install from crates.io (recommended)</a></h2>
+<pre><code class="language-bash">cargo install vyn-cli
+vyn --help
+</code></pre>
+<p>Requires Rust 1.80+ with Edition 2024 support. Install Rust via <a href="https://rustup.rs">rustup.rs</a>.</p>
+<h2 id="option-b-build-from-source"><a class="header" href="#option-b-build-from-source">Option B: Build from source</a></h2>
+<pre><code class="language-bash">git clone https://github.com/arnonsang/vyn.git
+cd vyn
+cargo install --path crates/vyn-cli
+vyn --help
+</code></pre>
+<h2 id="verify-installation"><a class="header" href="#verify-installation">Verify installation</a></h2>
+<pre><code class="language-bash">vyn --version
+</code></pre>
+<h2 id="os-keychain-requirements"><a class="header" href="#os-keychain-requirements">OS Keychain requirements</a></h2>
+<p><code>vyn</code> stores your project key in the OS keychain. No extra setup is needed on macOS or Windows.</p>
+<div class="table-wrapper"><table><thead><tr><th>Platform</th><th>Backend</th></tr></thead><tbody>
+<tr><td>Linux</td><td><code>keyutils</code> (kernel keyring) or Secret Service (D-Bus)</td></tr>
+<tr><td>macOS</td><td>macOS Keychain</td></tr>
+<tr><td>Windows</td><td>Windows Credential Manager (DPAPI)</td></tr>
+</tbody></table>
+</div>
+<p>On Linux with Secret Service, ensure <code>libdbus-1-dev</code> (Debian/Ubuntu) or <code>dbus-devel</code> (Fedora) is installed at compile time.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
+<h2 id="1-initialize-a-vault"><a class="header" href="#1-initialize-a-vault">1. Initialize a vault</a></h2>
+<pre><code class="language-bash">vyn init my-project
+</code></pre>
+<p>This creates a <code>.vyn/</code> directory, generates a 256-bit AES project key stored in your OS keychain, and writes an initial manifest.</p>
+<h2 id="2-configure-storage"><a class="header" href="#2-configure-storage">2. Configure storage</a></h2>
+<p>Run the interactive config wizard:</p>
+<pre><code class="language-bash">vyn config
+</code></pre>
+<p>Or configure non-interactively for CI:</p>
+<pre><code class="language-bash"># In-memory only (no persistence)
+vyn config --provider memory --non-interactive
+
+# Self-hosted relay
+vyn config --provider relay --relay-url https://relay.example.com --non-interactive
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Configure storage before running <code>vyn auth</code> if you are using relay storage. Auth registers your identity on the relay.</p>
+</blockquote>
+<h2 id="3-authenticate"><a class="header" href="#3-authenticate">3. Authenticate</a></h2>
+<pre><code class="language-bash">vyn auth
+</code></pre>
+<p>This runs a 3-step flow:</p>
+<ol>
+<li>GitHub OAuth Device Flow — opens your browser. Confirm the one-time code.</li>
+<li>SSH key detection — finds <code>~/.ssh/id_ed25519</code> or <code>~/.ssh/id_rsa</code> automatically.</li>
+<li>SSH challenge-response — proves you hold the private key matching your GitHub-registered public key.</li>
+</ol>
+<p>On success, writes <code>.vyn/identity.toml</code>.</p>
+<h2 id="4-push"><a class="header" href="#4-push">4. Push</a></h2>
+<pre><code class="language-bash">vyn push
+</code></pre>
+<p>Encrypts tracked files and uploads encrypted blobs + manifest to the configured storage.</p>
+<h2 id="5-pull"><a class="header" href="#5-pull">5. Pull</a></h2>
+<pre><code class="language-bash">vyn pull
+</code></pre>
+<p>Downloads the encrypted manifest and blobs, decrypts in memory, and writes plaintext files to disk.</p>
+<hr />
+<h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
+<ul>
+<li>Run <code>vyn st</code> to see local changes against the baseline</li>
+<li>Run <code>vyn diff</code> to inspect line-level changes</li>
+<li>Share the vault with a teammate: <code>vyn share @teammate</code></li>
+<li>See all commands in the <a href="getting-started/../cli/init.html">CLI Reference</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-vyn-works"><a class="header" href="#how-vyn-works">How Vyn Works</a></h1>
+<p>vyn uses two main flows: <strong>identity + sharing</strong>, and <strong>push/pull sync</strong>.</p>
+<h2 id="auth-share-and-link"><a class="header" href="#auth-share-and-link">Auth, Share, and Link</a></h2>
+<pre class="mermaid">sequenceDiagram
+  participant U as User
+  participant C1 as vyn auth
+  participant GH as GitHub
+  participant FS as .vyn files
+  participant C2 as vyn share
+  participant C3 as vyn link
+  participant KC as OS Keychain
+
+  U-&gt;&gt;C1: vyn auth
+  C1-&gt;&gt;GH: OAuth Device Flow (required)
+  GH--&gt;&gt;C1: verified github_username
+  C1-&gt;&gt;GH: GET /&lt;username&gt;.keys
+  GH--&gt;&gt;C1: registered SSH public keys
+  C1-&gt;&gt;C1: ssh-keygen challenge-response (prove key ownership)
+  C1-&gt;&gt;FS: write .vyn/identity.toml
+
+  U-&gt;&gt;C2: vyn share @teammate
+  C2-&gt;&gt;KC: load project key
+  C2-&gt;&gt;GH: GET /teammate.keys
+  GH--&gt;&gt;C2: SSH public keys
+  C2-&gt;&gt;FS: write encrypted invites (.age)
+
+  U-&gt;&gt;C3: vyn link &lt;vault_id&gt;
+  C3-&gt;&gt;FS: read invite + identity private key path
+  C3-&gt;&gt;KC: store linked project key
+  C3-&gt;&gt;FS: rewrite vault_id in config.toml
+</pre>
+<h2 id="pushpull-with-relay-storage"><a class="header" href="#pushpull-with-relay-storage">Push/Pull with Relay Storage</a></h2>
+<pre class="mermaid">sequenceDiagram
+  participant U as User
+  participant CLI as vyn push/pull
+  participant Blobs as .vyn/blobs/
+  participant KC as OS Keychain
+  participant Relay as Relay API
+  participant S3 as S3 mirror (optional)
+
+  U-&gt;&gt;CLI: vyn push
+  CLI-&gt;&gt;KC: load project key
+  CLI-&gt;&gt;Blobs: encrypt file → {hash}.enc (skip if cached)
+  CLI-&gt;&gt;Relay: upload encrypted blobs + encrypted manifest
+  Relay-&gt;&gt;S3: mirror write (optional)
+  CLI-&gt;&gt;CLI: update manifest.json + history
+
+  U-&gt;&gt;CLI: vyn pull
+  CLI-&gt;&gt;KC: load project key
+  CLI-&gt;&gt;Relay: download encrypted manifest + blobs
+  Relay-&gt;&gt;S3: fetch if local object missing (optional)
+  CLI-&gt;&gt;Blobs: cache encrypted blob as {hash}.enc
+  CLI-&gt;&gt;CLI: decrypt manifest + blobs in memory
+  CLI-&gt;&gt;CLI: write plaintext files + update manifest + history
+</pre>
+<h2 id="key-properties"><a class="header" href="#key-properties">Key properties</a></h2>
+<ul>
+<li><strong>Zero-knowledge relay</strong> — the relay and S3 backend never see plaintext content or metadata</li>
+<li><strong>Content-addressed blobs</strong> — files are stored as <code>{sha256}.enc</code>; identical content is deduplicated</li>
+<li><strong>Idempotent push</strong> — blobs already cached locally are not re-encrypted or re-uploaded</li>
+<li><strong>In-memory decryption</strong> — <code>vyn pull</code> never writes plaintext anywhere except the final destination path</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vault-structure"><a class="header" href="#vault-structure">Vault Structure</a></h1>
+<p>A vault is a project-scoped collection of encrypted state. Each vault has a unique UUID (<code>vault_id</code>) and lives in the <code>.vyn/</code> directory at the root of your project.</p>
+<h2 id="directory-layout"><a class="header" href="#directory-layout">Directory layout</a></h2>
+<pre><code>.vyn/
+├── config.toml         # vault_id, project name, storage provider settings
+├── identity.toml       # github_username, SSH key paths (written by vyn auth)
+├── manifest.json       # local plaintext manifest (path, sha256, size, mode, version)
+├── history/            # local sync snapshot log
+├── blobs/              # local cache of encrypted blobs
+│   └── &lt;sha256&gt;.enc    # AES-256-GCM encrypted file content
+└── invites/            # encrypted project key invites
+    └── &lt;vault_id&gt;__&lt;user&gt;__&lt;n&gt;.age
+</code></pre>
+<h2 id="configtoml"><a class="header" href="#configtoml">config.toml</a></h2>
+<pre><code class="language-toml">vault_id = "&lt;uuid&gt;"
+project_name = "my-project"
+storage_provider = "relay"       # memory | relay | unconfigured
+relay_url = "https://relay.example.com"
+</code></pre>
+<h2 id="identitytoml"><a class="header" href="#identitytoml">identity.toml</a></h2>
+<p>Written by <code>vyn auth</code>. Contains your confirmed GitHub identity and the SSH key paths used for key wrapping.</p>
+<pre><code class="language-toml">github_username = "your-handle"
+ssh_private_key = "/home/you/.ssh/id_ed25519"
+ssh_public_key  = "/home/you/.ssh/id_ed25519.pub"
+</code></pre>
+<h2 id="git-safety"><a class="header" href="#git-safety">Git safety</a></h2>
+<p><code>vyn init</code> automatically adds <code>.vyn/</code> to <code>.gitignore</code>. The vault directory should never be committed — it holds your encrypted blobs and identity configuration.</p>
+<h2 id="vynignore"><a class="header" href="#vynignore">.vynignore</a></h2>
+<p>Create a <code>.vynignore</code> file in your project root to exclude files from tracking. The syntax is identical to <code>.gitignore</code>.</p>
+<pre><code># .vynignore
+*.log
+build/
+dist/
+</code></pre>
+<p><code>vyn init</code> copies <code>.vynignore.example</code> to <code>.vynignore</code> if an example file is present.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="encryption--keys"><a class="header" href="#encryption--keys">Encryption &amp; Keys</a></h1>
+<p>vyn uses two layers of cryptography: <strong>symmetric encryption</strong> for file content, and <strong>asymmetric key wrapping</strong> for sharing.</p>
+<h2 id="symmetric-encryption-aes-256-gcm"><a class="header" href="#symmetric-encryption-aes-256-gcm">Symmetric encryption (AES-256-GCM)</a></h2>
+<p>All blobs and manifests are encrypted with AES-256-GCM using the project key (PK).</p>
+<ul>
+<li>Key size: 256 bits, generated with <code>ring::rand::SecureRandom</code></li>
+<li>Nonce: 96-bit random value, unique per encryption operation, stored alongside the ciphertext</li>
+<li>Ciphertext is content-addressed by SHA-256 of the plaintext</li>
+</ul>
+<p>The PK is stored in the OS keychain (secure enclave) and never written to disk in plaintext.</p>
+<h2 id="asymmetric-key-wrapping-age--ssh"><a class="header" href="#asymmetric-key-wrapping-age--ssh">Asymmetric key wrapping (age + SSH)</a></h2>
+<p>When you share a vault with a teammate, the PK is wrapped (encrypted) with their SSH public key using <a href="https://age-encryption.org">age</a> with the <code>ssh</code> recipient plugin.</p>
+<p>Supported SSH key types: RSA and Ed25519.</p>
+<p>The wrapped invite file (<code>.age</code>) can only be decrypted by the holder of the matching SSH private key. The relay stores only the ciphertext and cannot read the PK.</p>
+<h2 id="key-summary"><a class="header" href="#key-summary">Key summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Role</th><th>Storage</th></tr></thead><tbody>
+<tr><td><strong>Project Key (PK)</strong></td><td>Symmetric (AES-256-GCM). Encrypts files and manifests.</td><td>OS Keychain</td></tr>
+<tr><td><strong>SSH Public Key</strong></td><td>Asymmetric. Used to wrap the PK for a teammate.</td><td>Public (GitHub)</td></tr>
+<tr><td><strong>SSH Private Key</strong></td><td>Asymmetric. Used to unwrap an invite.</td><td><code>~/.ssh/id_ed25519</code></td></tr>
+<tr><td><strong>Nonce</strong></td><td>96-bit random. Ensures identical files produce different ciphertext.</td><td>Stored with each blob</td></tr>
+</tbody></table>
+</div>
+<h2 id="security-properties"><a class="header" href="#security-properties">Security properties</a></h2>
+<ul>
+<li><strong>Zero-knowledge relay</strong> — the relay never sees the PK or plaintext</li>
+<li><strong>No shared passwords</strong> — identity is proven via SSH challenge-response</li>
+<li><strong>Per-operation nonces</strong> — AES-GCM nonce reuse is prevented by using <code>ring::rand</code> for each encryption</li>
+<li><strong>secrecy crate</strong> — sensitive values are zeroized on drop in memory</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="manifests--blobs"><a class="header" href="#manifests--blobs">Manifests &amp; Blobs</a></h1>
+<h2 id="manifest"><a class="header" href="#manifest">Manifest</a></h2>
+<p>The manifest is a versioned JSON file that tracks all files in the vault. It is encrypted with the project key before being uploaded to storage.</p>
+<pre><code class="language-json">{
+  "version": 1,
+  "files": [
+    {
+      "path": ".env",
+      "sha256": "a1b2c3...",
+      "size": 512,
+      "mode": 33188
+    }
+  ]
+}
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>path</code></td><td>Relative path from the project root</td></tr>
+<tr><td><code>sha256</code></td><td>SHA-256 hash of the plaintext content</td></tr>
+<tr><td><code>size</code></td><td>Plaintext file size in bytes</td></tr>
+<tr><td><code>mode</code></td><td>Unix permission bits (preserves <code>chmod</code> state)</td></tr>
+</tbody></table>
+</div>
+<p>The manifest is re-encrypted and re-uploaded on every <code>vyn push</code>. On pull, it is downloaded, decrypted in memory, and used to determine which blobs to fetch.</p>
+<h2 id="blobs"><a class="header" href="#blobs">Blobs</a></h2>
+<p>Each file is stored as an encrypted, content-addressed blob:</p>
+<pre><code>.vyn/blobs/&lt;sha256&gt;.enc
+</code></pre>
+<p>The blob filename is the SHA-256 hash of the <strong>plaintext</strong> content. This provides natural deduplication: if two projects track the same file, the blob is only stored once per vault.</p>
+<p><strong>Upload process:</strong></p>
+<ol>
+<li>Hash the plaintext content (SHA-256)</li>
+<li>Check if <code>.vyn/blobs/&lt;hash&gt;.enc</code> already exists locally (skip re-encryption)</li>
+<li>Encrypt with AES-256-GCM using the PK + fresh nonce</li>
+<li>Upload ciphertext to relay (or memory store)</li>
+</ol>
+<p><strong>Download process:</strong></p>
+<ol>
+<li>Decrypt the manifest</li>
+<li>For each file entry, check if the blob is cached locally</li>
+<li>Fetch missing blobs from the relay</li>
+<li>Decrypt each blob in memory</li>
+<li>Write plaintext to disk at the original path</li>
+</ol>
+<h2 id="diff-engine"><a class="header" href="#diff-engine">Diff engine</a></h2>
+<p>When you run <code>vyn st -v</code> or <code>vyn diff</code>, vyn:</p>
+<ol>
+<li><strong>Detects binary files</strong> by scanning the first 1KB for null bytes or non-UTF-8 sequences</li>
+<li>For <strong>text files</strong>, uses the <code>similar</code> crate to produce a unified diff</li>
+<li>For <strong>binary files</strong>, shows a size change summary</li>
+</ol>
+<p>The diff compares the local working file against the baseline recorded in <code>.vyn/manifest.json</code> (the state at the last <code>vyn push</code> or <code>vyn pull</code>).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vyn-init"><a class="header" href="#vyn-init">vyn init</a></h1>
+<p>Initialize a new vault in the current directory.</p>
+<pre><code class="language-bash">vyn init [name]
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name</code></td><td>Optional project name. Defaults to the current directory name.</td></tr>
+</tbody></table>
+</div>
+<h2 id="what-it-does"><a class="header" href="#what-it-does">What it does</a></h2>
+<ol>
+<li>Fails with an error if <code>.vyn/config.toml</code> already exists</li>
+<li>Creates <code>.vyn/</code> and <code>.vyn/blobs/</code></li>
+<li>Generates a random vault UUID and 256-bit AES-256-GCM project key</li>
+<li>Stores the project key in the OS keychain under <code>(service=vyn, account=&lt;vault_id&gt;)</code></li>
+<li>Writes <code>.vyn/manifest.json</code> (initial empty file index) and <code>.vyn/config.toml</code></li>
+<li>Adds <code>.vyn/</code> to <code>.gitignore</code> (creates the file if absent)</li>
+<li>Copies <code>.vynignore.example</code> to <code>.vynignore</code> if an example is present</li>
+</ol>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<pre><code class="language-bash">$ vyn init backend-config
+✓ Vault initialized
+  vault_id:    f47ac10b-58cc-4372-a567-0e02b2c3d479
+  project:     backend-config
+  storage:     unconfigured (run `vyn config` to set up storage)
+</code></pre>
+<h2 id="next-steps-1"><a class="header" href="#next-steps-1">Next steps</a></h2>
+<p>After <code>vyn init</code>, run <a href="cli/./config.html"><code>vyn config</code></a> to configure a storage provider, then <a href="cli/./auth.html"><code>vyn auth</code></a> to register your identity.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vyn-auth"><a class="header" href="#vyn-auth">vyn auth</a></h1>
+<p>Authenticate your local identity using GitHub OAuth and a local SSH key.</p>
+<pre><code class="language-bash">vyn auth
+</code></pre>
+<h2 id="3-step-flow"><a class="header" href="#3-step-flow">3-step flow</a></h2>
+<h3 id="step-1-github-oauth-device-flow"><a class="header" href="#step-1-github-oauth-device-flow">Step 1: GitHub OAuth Device Flow</a></h3>
+<p>vyn opens <code>https://github.com/login/device</code> in your browser and displays a one-time code in the terminal. Confirm the code on GitHub. No username or password entry is required; GitHub verifies your identity.</p>
+<h3 id="step-2-ssh-key-detection"><a class="header" href="#step-2-ssh-key-detection">Step 2: SSH key detection</a></h3>
+<p>vyn automatically finds <code>~/.ssh/id_ed25519</code> or <code>~/.ssh/id_rsa</code>. If neither is found, it prints an error with instructions.</p>
+<h3 id="step-3-ssh-challenge-response"><a class="header" href="#step-3-ssh-challenge-response">Step 3: SSH challenge-response</a></h3>
+<p>vyn fetches your registered public keys from <code>https://github.com/&lt;username&gt;.keys</code> and runs a local <code>ssh-keygen</code> challenge-response to prove you hold the matching private key.</p>
+<p>Your local key <strong>must</strong> be listed on GitHub because teammates use it to encrypt vault invites for you. If the key is not on GitHub yet, <code>vyn auth</code> prints the key and tells you where to add it.</p>
+<h3 id="with-relay-storage"><a class="header" href="#with-relay-storage">With relay storage</a></h3>
+<p>If your config points to a relay (<code>storage_provider = "relay"</code>), <code>vyn auth</code> also registers your GitHub username and SSH public key on the relay. The relay uses this registration to authenticate subsequent push/pull requests.</p>
+<h2 id="output"><a class="header" href="#output">Output</a></h2>
+<p>On success, writes <code>.vyn/identity.toml</code>:</p>
+<pre><code class="language-toml">github_username = "your-handle"
+ssh_private_key = "/home/you/.ssh/id_ed25519"
+ssh_public_key  = "/home/you/.ssh/id_ed25519.pub"
+</code></pre>
+<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment variables</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>VYN_GITHUB_CLIENT_ID</code></td><td>Override the built-in OAuth <code>client_id</code> (advanced)</td></tr>
+<tr><td><code>VYN_SKIP_GITHUB_VERIFY=1</code></td><td>Skip GitHub identity and SSH verification (offline CI only, debug builds)</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="vyn-config"><a class="header" href="#vyn-config">vyn config</a></h1>
+<p>Configure storage and relay settings in <code>.vyn/config.toml</code>.</p>
+<pre><code class="language-bash">vyn config [options]
+</code></pre>
+<h2 id="options"><a class="header" href="#options">Options</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--provider &lt;memory|relay&gt;</code></td><td>Storage provider</td></tr>
+<tr><td><code>--relay-url &lt;url&gt;</code></td><td>Relay URL (required when provider is <code>relay</code>)</td></tr>
+<tr><td><code>--non-interactive</code></td><td>Skip interactive wizard; all required options must be provided via flags</td></tr>
+</tbody></table>
+</div>
+<h2 id="interactive-mode-default"><a class="header" href="#interactive-mode-default">Interactive mode (default)</a></h2>
+<pre><code class="language-bash">vyn config
+</code></pre>
+<p>Opens a guided wizard to select the storage provider and, if relay is chosen, enter the relay URL.</p>
+<h2 id="non-interactive-mode"><a class="header" href="#non-interactive-mode">Non-interactive mode</a></h2>
+<pre><code class="language-bash"># Memory (no persistence)
+vyn config --provider memory --non-interactive
+
+# Relay
+vyn config --provider relay --relay-url https://relay.example.com --non-interactive
+</code></pre>
+<p>Useful in CI environments or automated setup scripts.</p>
+<h2 id="resulting-configtoml"><a class="header" href="#resulting-configtoml">Resulting config.toml</a></h2>
+<pre><code class="language-toml">vault_id = "&lt;uuid&gt;"
+project_name = "my-project"
+storage_provider = "relay"
+relay_url = "https://relay.example.com"
+</code></pre>
+<h2 id="storage-providers"><a class="header" href="#storage-providers">Storage providers</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Provider</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>memory</code></td><td>In-process only; state is lost when the process exits. Useful for testing.</td></tr>
+<tr><td><code>relay</code></td><td>gRPC relay server. Requires <code>relay_url</code>.</td></tr>
+<tr><td><code>unconfigured</code></td><td>Default after <code>vyn init</code>. Push/pull will fail until configured.</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="vyn-push--pull"><a class="header" href="#vyn-push--pull">vyn push / pull</a></h1>
+<h2 id="vyn-push"><a class="header" href="#vyn-push">vyn push</a></h2>
+<p>Encrypt local tracked files and upload to the configured storage provider.</p>
+<pre><code class="language-bash">vyn push
+</code></pre>
+<p><strong>What it does:</strong></p>
+<ol>
+<li>Reads <code>.vyn/config.toml</code> for vault ID and storage provider</li>
+<li>Loads the project key from the OS keychain</li>
+<li>For each tracked file: hashes plaintext, checks if <code>.vyn/blobs/{hash}.enc</code> is already cached (skips re-encryption if so), encrypts with AES-256-GCM, uploads ciphertext blob</li>
+<li>Encrypts the manifest with the project key and uploads it</li>
+<li>Writes a local history entry</li>
+</ol>
+<hr />
+<h2 id="vyn-pull"><a class="header" href="#vyn-pull">vyn pull</a></h2>
+<p>Download encrypted state from the storage provider and restore files locally.</p>
+<pre><code class="language-bash">vyn pull
+</code></pre>
+<p><strong>What it does:</strong></p>
+<ol>
+<li>Loads the project key from the OS keychain</li>
+<li>Downloads the encrypted manifest and decrypts it in memory</li>
+<li>For each blob: downloads encrypted ciphertext, caches to <code>.vyn/blobs/{hash}.enc</code>, decrypts in memory, writes plaintext to the original path</li>
+<li>Updates <code>.vyn/manifest.json</code> and writes a history entry</li>
+</ol>
+<h2 id="notes"><a class="header" href="#notes">Notes</a></h2>
+<ul>
+<li>Both commands require a configured storage provider (<code>vyn config</code>) and authenticated identity (<code>vyn auth</code>) when using relay storage</li>
+<li>Pull overwrites local files with the remote baseline; run <code>vyn st</code> first to check for local changes</li>
+<li>Encrypted blobs are cached locally in <code>.vyn/blobs/</code>; only new or changed blobs are downloaded on subsequent pulls</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vyn-st--diff"><a class="header" href="#vyn-st--diff">vyn st / diff</a></h1>
+<h2 id="vyn-st"><a class="header" href="#vyn-st">vyn st</a></h2>
+<p>Show changes in the working directory against the last push baseline.</p>
+<pre><code class="language-bash">vyn st [-v]
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-v</code> / <code>--verbose</code></td><td>Include inline unified diffs for text files and size summaries for binary files</td></tr>
+</tbody></table>
+</div>
+<p><strong>Output example:</strong></p>
+<pre><code>Modified  .env
+Added     .env.staging
+Deleted   .env.old
+</code></pre>
+<hr />
+<h2 id="vyn-diff"><a class="header" href="#vyn-diff">vyn diff</a></h2>
+<p>Show a unified diff against the baseline manifest.</p>
+<pre><code class="language-bash">vyn diff [file]
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>file</code></td><td>Optional. Diff only this path. If omitted, diffs all changed paths.</td></tr>
+</tbody></table>
+</div>
+<p><strong>Output example:</strong></p>
+<pre><code class="language-diff">--- .env  (baseline)
++++ .env  (local)
+@@ -1,4 +1,5 @@
+ DATABASE_URL=postgres://localhost/mydb
+-API_KEY=old_key
++API_KEY=new_key
++CACHE_TTL=300
+</code></pre>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Binary files are shown as a size-change summary: <code>Binary file .env.db changed (512 -&gt; 1024 bytes)</code></li>
+<li>Returns an error if the specified file is not tracked in the baseline manifest</li>
+<li>The diff compares against <code>.vyn/manifest.json</code> — the state at the last <code>vyn push</code> or <code>vyn pull</code></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vyn-share--link"><a class="header" href="#vyn-share--link">vyn share / link</a></h1>
+<h2 id="vyn-share"><a class="header" href="#vyn-share">vyn share</a></h2>
+<p>Create encrypted invite files for a GitHub user so they can join the vault.</p>
+<pre><code class="language-bash">vyn share @user
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>@user</code></td><td>GitHub username of the recipient (with or without <code>@</code>)</td></tr>
+</tbody></table>
+</div>
+<p><strong>What it does:</strong></p>
+<ol>
+<li>Fetches SSH public keys from <code>https://github.com/&lt;user&gt;.keys</code></li>
+<li>Loads the project key from the OS keychain</li>
+<li>Wraps the project key for each SSH key found using <code>age</code></li>
+<li>Writes invite files to <code>.vyn/invites/&lt;vault_id&gt;__&lt;user&gt;__&lt;index&gt;.age</code></li>
+</ol>
+<p>The invite files are encrypted specifically for the recipient's SSH private key. The relay (if used) cannot read the project key.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">vyn share @teammate
+# ✓ Created 2 invite(s) for @teammate
+#   .vyn/invites/f47ac10b__teammate__0.age
+#   .vyn/invites/f47ac10b__teammate__1.age
+</code></pre>
+<hr />
+<h2 id="vyn-link"><a class="header" href="#vyn-link">vyn link</a></h2>
+<p>Decrypt an invite and import the project key into the keychain.</p>
+<pre><code class="language-bash">vyn link &lt;vault_id&gt;
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Argument</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>vault_id</code></td><td>UUID of the vault to link</td></tr>
+</tbody></table>
+</div>
+<p><strong>What it does:</strong></p>
+<ol>
+<li>Reads invite files from <code>.vyn/invites/</code> matching <code>&lt;vault_id&gt;__&lt;your_username&gt;__*.age</code></li>
+<li>Tries each invite with the private key from <code>.vyn/identity.toml</code></li>
+<li>Stores the decrypted project key in the OS keychain</li>
+<li>Rewrites <code>vault_id</code> in <code>.vyn/config.toml</code> to the linked vault's ID</li>
+</ol>
+<p>After linking, <code>vyn push</code> and <code>vyn pull</code> will use the linked vault ID.</p>
+<h2 id="team-onboarding-flow"><a class="header" href="#team-onboarding-flow">Team onboarding flow</a></h2>
+<pre class="mermaid">sequenceDiagram
+  participant Alice
+  participant Relay
+  participant Bob
+
+  Alice-&gt;&gt;Alice: vyn share @bob
+  Note over Alice: wraps PK with Bob's SSH key
+  Alice-&gt;&gt;Relay: upload invite (ciphertext only)
+
+  Bob-&gt;&gt;Relay: vyn link &lt;vault_id&gt;
+  Relay--&gt;&gt;Bob: encrypted invite
+  Note over Bob: decrypt with ~/.ssh/id_ed25519
+  Bob-&gt;&gt;Bob: store PK in keychain
+</pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vyn-add--del"><a class="header" href="#vyn-add--del">vyn add / del</a></h1>
+<h2 id="vyn-add"><a class="header" href="#vyn-add">vyn add</a></h2>
+<p>Explicitly add files or directories to vault tracking.</p>
+<pre><code class="language-bash">vyn add &lt;paths...&gt;
+</code></pre>
+<p>Adds the specified paths to the manifest so they will be included in the next <code>vyn push</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">vyn add .env .env.staging secrets/
+</code></pre>
+<hr />
+<h2 id="vyn-del"><a class="header" href="#vyn-del">vyn del</a></h2>
+<p>Remove files or directories from vault tracking.</p>
+<pre><code class="language-bash">vyn del &lt;paths...&gt;
+</code></pre>
+<p>Removes the specified paths from the manifest. The files remain on disk but will no longer be pushed or pulled.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">vyn del .env.old
+</code></pre>
+<h2 id="notes-1"><a class="header" href="#notes-1">Notes</a></h2>
+<ul>
+<li>Both commands update <code>.vyn/manifest.json</code> immediately; the change takes effect on the next <code>vyn push</code></li>
+<li>Tracked files are also subject to <code>.vynignore</code> rules; adding a path that matches an ignore rule has no effect</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="utility-commands"><a class="header" href="#utility-commands">Utility Commands</a></h1>
+<h2 id="vyn-run"><a class="header" href="#vyn-run">vyn run</a></h2>
+<p>Run a subprocess with env vars injected from <code>.env</code> files and encrypted vault blobs.</p>
+<pre><code class="language-bash">vyn run -- &lt;cmd...&gt;
+</code></pre>
+<p><strong>What it does:</strong></p>
+<ol>
+<li>Merges keys from <code>.env</code> and <code>.env.*</code> files in the current directory</li>
+<li>Decrypts and merges <code>.env</code> blobs from the vault baseline (when a project key is available)</li>
+<li>Passes the merged map to the child process environment</li>
+<li>Does <strong>not</strong> write decrypted values to disk</li>
+</ol>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">vyn run -- node server.js
+vyn run -- docker compose up
+</code></pre>
+<hr />
+<h2 id="vyn-check"><a class="header" href="#vyn-check">vyn check</a></h2>
+<p>Compare key sets between <code>.env</code> and <code>.env.example</code>.</p>
+<pre><code class="language-bash">vyn check
+</code></pre>
+<ul>
+<li>Reports keys missing from <code>.env</code> (present in <code>.env.example</code>)</li>
+<li>Reports extra keys in <code>.env</code> (not in <code>.env.example</code>)</li>
+<li>Exits non-zero on any mismatch</li>
+</ul>
+<hr />
+<h2 id="vyn-history"><a class="header" href="#vyn-history">vyn history</a></h2>
+<p>List recorded sync snapshots.</p>
+<pre><code class="language-bash">vyn history
+</code></pre>
+<p>Shows timestamps and vault IDs from <code>.vyn/history/</code>.</p>
+<hr />
+<h2 id="vyn-doctor"><a class="header" href="#vyn-doctor">vyn doctor</a></h2>
+<p>Run local health checks.</p>
+<pre><code class="language-bash">vyn doctor
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Check</th><th>Passes when</th></tr></thead><tbody>
+<tr><td><code>vault_directory</code></td><td><code>.vyn/</code> exists</td></tr>
+<tr><td><code>config_file</code></td><td><code>config.toml</code> is readable and valid TOML</td></tr>
+<tr><td><code>keychain</code></td><td>project key loads from OS keychain</td></tr>
+<tr><td><code>manifest</code></td><td><code>.vyn/manifest.json</code> is readable and valid</td></tr>
+<tr><td><code>identity</code></td><td><code>.vyn/identity.toml</code> is valid and SSH key files exist</td></tr>
+<tr><td><code>relay_config</code></td><td><code>relay_url</code> is set and starts with <code>http://</code> or <code>https://</code></td></tr>
+<tr><td><code>storage</code></td><td>storage provider is <code>memory</code> or <code>relay</code> (not <code>unconfigured</code>)</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="vyn-rotate"><a class="header" href="#vyn-rotate">vyn rotate</a></h2>
+<p>Rotate the project key and re-encrypt all remote state.</p>
+<pre><code class="language-bash">vyn rotate
+</code></pre>
+<ol>
+<li>Generates a new AES-256-GCM project key</li>
+<li>Re-encrypts and re-uploads all tracked blobs and the manifest</li>
+<li>Updates the OS keychain with the new key</li>
+<li>Rebuilds invite files for known teammates</li>
+<li>Writes a history entry</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="config-files"><a class="header" href="#config-files">Config Files</a></h1>
+<h2 id="vynconfigtoml"><a class="header" href="#vynconfigtoml">.vyn/config.toml</a></h2>
+<p>Primary vault configuration. Written by <code>vyn init</code> and updated by <code>vyn config</code> and <code>vyn link</code>.</p>
+<pre><code class="language-toml">vault_id = "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+project_name = "my-project"
+storage_provider = "relay"        # memory | relay | unconfigured
+relay_url = "https://relay.example.com"
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>vault_id</code></td><td>UUID identifying this vault on the storage backend</td></tr>
+<tr><td><code>project_name</code></td><td>Human-readable project name</td></tr>
+<tr><td><code>storage_provider</code></td><td>Active backend: <code>memory</code>, <code>relay</code>, or <code>unconfigured</code></td></tr>
+<tr><td><code>relay_url</code></td><td>URL of the relay server (required when provider is <code>relay</code>)</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="vynidentitytoml"><a class="header" href="#vynidentitytoml">.vyn/identity.toml</a></h2>
+<p>Written by <code>vyn auth</code>. Stores your confirmed GitHub identity and SSH key paths.</p>
+<pre><code class="language-toml">github_username = "your-handle"
+ssh_private_key = "/home/you/.ssh/id_ed25519"
+ssh_public_key  = "/home/you/.ssh/id_ed25519.pub"
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>github_username</code></td><td>Verified GitHub username (confirmed via OAuth)</td></tr>
+<tr><td><code>ssh_private_key</code></td><td>Absolute path to the SSH private key used for key unwrapping</td></tr>
+<tr><td><code>ssh_public_key</code></td><td>Absolute path to the corresponding SSH public key</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="vynmanifestjson"><a class="header" href="#vynmanifestjson">.vyn/manifest.json</a></h2>
+<p>Local plaintext manifest. Tracks the baseline state of all vault files.</p>
+<pre><code class="language-json">{
+  "version": 1,
+  "files": [
+    { "path": ".env", "sha256": "a1b2c3...", "size": 512, "mode": 33188 }
+  ]
+}
+</code></pre>
+<p>This file is the reference point for <code>vyn st</code> and <code>vyn diff</code>. It is updated on every <code>vyn push</code> and <code>vyn pull</code>.</p>
+<hr />
+<h2 id="vynignore-1"><a class="header" href="#vynignore-1">.vynignore</a></h2>
+<p>Exclude files from vault tracking. Uses standard gitignore syntax.</p>
+<pre><code class="language-gitignore"># .vynignore
+*.log
+build/
+dist/
+node_modules/
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="environment-variables-1"><a class="header" href="#environment-variables-1">Environment Variables</a></h1>
+<h2 id="cli-environment-variables"><a class="header" href="#cli-environment-variables">CLI environment variables</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Used by</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>VYN_GITHUB_CLIENT_ID</code></td><td><code>vyn auth</code></td><td>Override the built-in OAuth <code>client_id</code> (advanced)</td></tr>
+<tr><td><code>VYN_SKIP_GITHUB_VERIFY=1</code></td><td><code>vyn auth</code></td><td>Skip GitHub identity and SSH verification (offline CI; debug builds only)</td></tr>
+<tr><td><code>VYN_RELAY_PORT</code></td><td><code>vyn serve</code>, Docker Compose</td><td>Relay listening port override</td></tr>
+</tbody></table>
+</div>
+<h2 id="relay-environment-variables"><a class="header" href="#relay-environment-variables">Relay environment variables</a></h2>
+<p>These configure the relay server when running via <code>vyn serve</code>, Docker, or Docker Compose.</p>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>VYN_RELAY_PORT</code></td><td><code>50051</code></td><td>Listening port</td></tr>
+<tr><td><code>VYN_RELAY_DATA_DIR</code></td><td><code>./.vyn-relay</code></td><td>Local persistence directory</td></tr>
+<tr><td><code>VYN_RELAY_S3_BUCKET</code></td><td><em>(none)</em></td><td>S3 mirror bucket (optional)</td></tr>
+<tr><td><code>VYN_RELAY_S3_REGION</code></td><td><em>(none)</em></td><td>S3 region (required if bucket set)</td></tr>
+<tr><td><code>VYN_RELAY_S3_ENDPOINT</code></td><td><em>(none)</em></td><td>Custom S3 endpoint for R2/MinIO (optional)</td></tr>
+<tr><td><code>VYN_RELAY_S3_PREFIX</code></td><td><em>(none)</em></td><td>Key prefix inside bucket (optional)</td></tr>
+</tbody></table>
+</div>
+<p>CLI flags override environment variables; environment variables override defaults.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="key-architecture"><a class="header" href="#key-architecture">Key Architecture</a></h1>
+<p>vyn uses a two-layer key model.</p>
+<h2 id="layer-1-project-key-symmetric"><a class="header" href="#layer-1-project-key-symmetric">Layer 1: Project Key (symmetric)</a></h2>
+<p>The Project Key (PK) is a 256-bit AES key generated with <code>ring::rand::SecureRandom</code> when you run <code>vyn init</code>. It:</p>
+<ul>
+<li><strong>Never leaves the machine in plaintext</strong> — it is stored only in the OS keychain</li>
+<li>Is used to encrypt every file blob and the manifest before any network transfer</li>
+<li>Is identified in the keychain by <code>(service=vyn, account=&lt;vault_id&gt;)</code></li>
+</ul>
+<pre class="mermaid">sequenceDiagram
+    participant User as Project Lead
+    participant CLI as vyn CLI
+    participant OS as OS Keychain
+    participant Cloud as vyn Relay / S3
+
+    User-&gt;&gt;CLI: vyn init &quot;my-project&quot;
+    Note over CLI: Generate 256-bit Random Key (PK)
+    CLI-&gt;&gt;OS: Store PK (Service: vyn, Account: vault_id)
+    Note over OS: Key is now in Secure Enclave
+    CLI-&gt;&gt;CLI: Create Manifest (v1)
+    CLI-&gt;&gt;Cloud: Upload Manifest + Project Metadata
+    CLI--&gt;&gt;User: Project Initialized
+</pre>
+<p><strong>Key property:</strong> The relay never sees the PK. It only knows that a project with a given <code>vault_id</code> exists.</p>
+<h2 id="layer-2-ssh-key-wrapping-asymmetric"><a class="header" href="#layer-2-ssh-key-wrapping-asymmetric">Layer 2: SSH key wrapping (asymmetric)</a></h2>
+<p>To share the vault, the PK is wrapped (encrypted) with the recipient's SSH public key using <a href="https://age-encryption.org">age</a>. The wrapped invite is a <code>.age</code> file that can only be decrypted by the holder of the matching SSH private key.</p>
+<p>Supported SSH key types: <strong>RSA</strong> and <strong>Ed25519</strong>.</p>
+<h2 id="multi-device-sync"><a class="header" href="#multi-device-sync">Multi-device sync</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant PC1 as Machine 1 (Mac)
+    participant GH as GitHub
+    participant Cloud as vyn Relay
+    participant PC2 as Machine 2 (Linux)
+
+    Note over PC1: vyn init
+    PC1-&gt;&gt;PC1: Generate PK &amp; Store in Mac Keychain
+
+    Note over PC1: vyn share @me
+    PC1-&gt;&gt;GH: Get ALL Public Keys for @me
+    GH--&gt;&gt;PC1: [Key_Mac, Key_Linux]
+
+    PC1-&gt;&gt;PC1: Wrap PK with Key_Linux
+    PC1-&gt;&gt;Cloud: Upload Encrypted Invite for Key_Linux
+
+    Note over PC2: vyn link &lt;vault_id&gt;
+    PC2-&gt;&gt;Cloud: GET Invites for @me
+    PC2-&gt;&gt;PC2: Decrypt with Linux Private Key
+    PC2-&gt;&gt;PC2: Store PK in Linux Keychain
+</pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sharing-keys"><a class="header" href="#sharing-keys">Sharing Keys</a></h1>
+<p>Key sharing uses <strong>asymmetric key wrapping</strong>: the sender encrypts the PK with the recipient's public SSH key. Only the recipient's private key can unwrap it.</p>
+<h2 id="flow-vyn-share-bob"><a class="header" href="#flow-vyn-share-bob">Flow: vyn share @bob</a></h2>
+<pre class="mermaid">sequenceDiagram
+    participant Lead as Project Lead (Alice)
+    participant GH as GitHub API
+    participant CLI as vyn CLI (Alice)
+    participant Cloud as vyn Relay
+    participant Peer as Teammate (Bob)
+    participant OS as Bob's OS Keychain
+
+    Lead-&gt;&gt;CLI: vyn share @bob
+    CLI-&gt;&gt;GH: GET github.com/bob.keys
+    GH--&gt;&gt;CLI: Bob's Public SSH Keys (RSA/Ed25519)
+
+    CLI-&gt;&gt;CLI: Fetch PK from Keychain
+    Note over CLI: Wrap PK with each of Bob's keys (age)
+
+    CLI-&gt;&gt;Cloud: Upload Encrypted Invite(s) for Bob
+
+    Note over Peer: Bob runs vyn link &lt;vault_id&gt;
+    Peer-&gt;&gt;Cloud: GET Invite for Bob
+    Cloud--&gt;&gt;Peer: Encrypted Invite Blob
+
+    Note over Peer: Uses ~/.ssh/id_ed25519
+    Peer-&gt;&gt;Peer: Decrypt Invite → Extract PK
+    Peer-&gt;&gt;OS: Store PK in Bob's Keychain
+</pre>
+<h2 id="why-this-is-secure"><a class="header" href="#why-this-is-secure">Why this is secure</a></h2>
+<ol>
+<li><strong>No shared passwords</strong> — you never transmit the PK in plaintext</li>
+<li><strong>Identity-bound</strong> — only the holder of the SSH private key can unlock the invite</li>
+<li><strong>Relay-blind</strong> — the relay stores only ciphertext and cannot read the PK</li>
+<li><strong>Per-key invites</strong> — if Bob has multiple SSH keys on GitHub, one invite is created for each key so any of his machines can link</li>
+</ol>
+<h2 id="commands"><a class="header" href="#commands">Commands</a></h2>
+<pre><code class="language-bash"># Share with a teammate
+vyn share @bob
+
+# Share with yourself (for multi-device setup)
+vyn share @me
+
+# Accept an invite
+vyn link &lt;vault_id&gt;
+</code></pre>
+<p>See <a href="key-management/../cli/share-link.html">vyn share / link</a> for full CLI reference.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="key-rotation"><a class="header" href="#key-rotation">Key Rotation</a></h1>
+<h2 id="vyn-rotate-1"><a class="header" href="#vyn-rotate-1">vyn rotate</a></h2>
+<p>Rotate the project key. This generates a new AES-256-GCM key and re-encrypts all remote state.</p>
+<pre><code class="language-bash">vyn rotate
+</code></pre>
+<h2 id="what-it-does-1"><a class="header" href="#what-it-does-1">What it does</a></h2>
+<ol>
+<li>Generates a new 256-bit AES project key via <code>ring::rand::SecureRandom</code></li>
+<li>Downloads all currently uploaded blobs</li>
+<li>Re-encrypts each blob with the new key + fresh nonces</li>
+<li>Re-uploads all blobs and re-encrypts the manifest</li>
+<li>Updates the OS keychain entry with the new key</li>
+<li>Rebuilds invite files for known teammates (re-wraps new key with their SSH public keys)</li>
+<li>Writes a history entry</li>
+</ol>
+<h2 id="when-to-rotate"><a class="header" href="#when-to-rotate">When to rotate</a></h2>
+<ul>
+<li>A team member leaves and you want to revoke their access</li>
+<li>You suspect the project key has been compromised</li>
+<li>Routine periodic rotation policy</li>
+</ul>
+<h2 id="revoking-a-teammate"><a class="header" href="#revoking-a-teammate">Revoking a teammate</a></h2>
+<p>Re-key rotation alone does not immediately revoke a teammate who already has the old PK cached in their keychain. After rotating:</p>
+<ol>
+<li>Do <strong>not</strong> run <code>vyn share @formercolleague</code> with the new key</li>
+<li>The former teammate's keychain still holds the old PK, but their future pushes/pulls will fail because the relay now has state encrypted with the new PK</li>
+<li>For complete revocation, ensure the relay purges old blobs (contact your relay admin or delete the vault data directory and re-push)</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="relay-overview"><a class="header" href="#relay-overview">Relay Overview</a></h1>
+<p>The vyn relay is a <strong>self-hosted gRPC server</strong> that stores encrypted blobs and manifests on behalf of vault clients. It is the recommended storage backend for teams.</p>
+<h2 id="key-properties-1"><a class="header" href="#key-properties-1">Key properties</a></h2>
+<ul>
+<li><strong>Zero-knowledge</strong> — the relay stores only ciphertext; it cannot read your files or project key</li>
+<li><strong>Authentication</strong> — clients authenticate via SSH challenge-response (registered during <code>vyn auth</code>)</li>
+<li><strong>Optional S3 mirror</strong> — blobs can be mirrored to S3/R2 for durability</li>
+<li><strong>Single binary</strong> — run via <code>vyn serve --relay</code> (same binary as the CLI)</li>
+</ul>
+<h2 id="running-the-relay"><a class="header" href="#running-the-relay">Running the relay</a></h2>
+<pre><code class="language-bash"># Basic
+vyn serve --relay --port 50051 --data-dir ./.vyn-relay
+
+# With S3 mirror
+vyn serve --relay \
+  --port 50051 \
+  --data-dir ./.vyn-relay \
+  --s3-bucket my-vyn-bucket \
+  --s3-region us-east-1
+</code></pre>
+<h2 id="relay-data-layout"><a class="header" href="#relay-data-layout">Relay data layout</a></h2>
+<pre><code>&lt;data-dir&gt;/
+├── manifests/&lt;vault_id&gt;.enc
+├── blobs/&lt;vault_id&gt;/&lt;sha256&gt;.enc
+├── identities/&lt;username&gt;.pub
+└── invites/&lt;vault_id&gt;/&lt;recipient&gt;/&lt;sha256&gt;.age
+</code></pre>
+<h2 id="tls"><a class="header" href="#tls">TLS</a></h2>
+<p>The relay does not terminate TLS itself. Use a reverse proxy (nginx, Caddy) in front of the relay port for HTTPS.</p>
+<pre><code class="language-nginx">server {
+    listen 443 ssl http2;
+    ssl_certificate     /etc/ssl/certs/relay.crt;
+    ssl_certificate_key /etc/ssl/private/relay.key;
+
+    location / {
+        grpc_pass grpc://127.0.0.1:50051;
+    }
+}
+</code></pre>
+<p>Set <code>relay_url = "https://relay.example.com"</code> in <code>.vyn/config.toml</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="docker-deployment"><a class="header" href="#docker-deployment">Docker Deployment</a></h1>
+<h2 id="run-directly"><a class="header" href="#run-directly">Run directly</a></h2>
+<pre><code class="language-bash">docker run --rm -p 50051:50051 -v vyn-relay-data:/data \
+  ghcr.io/arnonsang/vyn-relay:latest \
+  --relay --port 50051 --data-dir /data
+</code></pre>
+<p>Using environment variables:</p>
+<pre><code class="language-bash">docker run --rm -p 50051:50051 -v vyn-relay-data:/data \
+  -e VYN_RELAY_PORT=50051 \
+  -e VYN_RELAY_DATA_DIR=/data \
+  -e VYN_RELAY_S3_BUCKET=my-vyn-bucket \
+  -e VYN_RELAY_S3_REGION=us-east-1 \
+  ghcr.io/arnonsang/vyn-relay:latest --relay
+</code></pre>
+<h2 id="docker-compose"><a class="header" href="#docker-compose">Docker Compose</a></h2>
+<p>A <code>docker-compose.yml</code> is included in the repository:</p>
+<pre><code class="language-bash">VYN_RELAY_PORT=50052 docker compose up -d --build
+</code></pre>
+<p>Relay data is stored in the named volume <code>vyn-relay-data</code>.</p>
+<h2 id="build-from-source"><a class="header" href="#build-from-source">Build from source</a></h2>
+<pre><code class="language-bash">git clone https://github.com/arnonsang/vyn.git
+cd vyn
+docker build -t vyn-relay .
+docker run --rm -p 50051:50051 -v vyn-relay-data:/data vyn-relay \
+  --relay --port 50051 --data-dir /data
+</code></pre>
+<h2 id="tls-with-caddy-example"><a class="header" href="#tls-with-caddy-example">TLS with Caddy (example)</a></h2>
+<pre><code class="language-yaml"># Caddyfile
+relay.example.com {
+  reverse_proxy h2c://10.0.0.2:50051
+}
+</code></pre>
+<p>Caddy handles HTTPS and forwards plain gRPC (h2c) to the relay container. Set <code>relay_url = "https://relay.example.com"</code> in clients.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="storage-backends"><a class="header" href="#storage-backends">Storage Backends</a></h1>
+<h2 id="local-only"><a class="header" href="#local-only">local-only</a></h2>
+<p>Blobs and manifests are persisted to the relay's data directory on disk.</p>
+<p><strong>Enable:</strong> <code>vyn serve --relay --data-dir /path/to/data</code></p>
+<div class="table-wrapper"><table><thead><tr><th>Property</th><th>Value</th></tr></thead><tbody>
+<tr><td>Write</td><td>Persist to relay volume</td></tr>
+<tr><td>Read</td><td>Read from relay volume</td></tr>
+<tr><td>Best fit</td><td>Simplest self-hosted setup</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="local--s3-mirror"><a class="header" href="#local--s3-mirror">local + S3 mirror</a></h2>
+<p>Blobs are written locally first, then mirrored to S3 (or any S3-compatible API like Cloudflare R2 or MinIO).</p>
+<p><strong>Enable:</strong> add <code>--s3-bucket</code> and <code>--s3-region</code></p>
+<pre><code class="language-bash">vyn serve --relay \
+  --data-dir ./.vyn-relay \
+  --s3-bucket my-vyn-bucket \
+  --s3-region us-east-1 \
+  --s3-endpoint https://s3.us-east-1.amazonaws.com \
+  --s3-prefix vyn
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Property</th><th>Value</th></tr></thead><tbody>
+<tr><td>Write</td><td>Persist locally first, then mirror to S3</td></tr>
+<tr><td>Read</td><td>Local cache; fallback to S3 if object missing</td></tr>
+<tr><td>Best fit</td><td>Durability + offsite cloud copy</td></tr>
+</tbody></table>
+</div>
+<p>If S3 is unavailable, the relay falls back to local persistence automatically.</p>
+<h2 id="choosing-a-backend"><a class="header" href="#choosing-a-backend">Choosing a backend</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Scenario</th><th>Recommendation</th></tr></thead><tbody>
+<tr><td>Small team, single server</td><td>local-only</td></tr>
+<tr><td>High availability / offsite backup</td><td>local + S3 mirror</td></tr>
+<tr><td>Cloudflare R2 (no egress fees)</td><td>local + S3 mirror with <code>--s3-endpoint</code> set to R2 endpoint</td></tr>
+<tr><td>MinIO self-hosted</td><td>local + S3 mirror with <code>--s3-endpoint</code> set to MinIO URL</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="relay-reference"><a class="header" href="#relay-reference">Relay Reference</a></h1>
+<h2 id="cli-flags"><a class="header" href="#cli-flags">CLI flags</a></h2>
+<pre><code>vyn serve --relay [options]
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--relay</code></td><td>—</td><td>Required. Enable relay mode.</td></tr>
+<tr><td><code>--port</code></td><td><code>50051</code></td><td>Listening port</td></tr>
+<tr><td><code>--data-dir</code></td><td><code>./.vyn-relay</code></td><td>Local persistence directory</td></tr>
+<tr><td><code>--s3-bucket</code></td><td><em>(none)</em></td><td>S3 mirror bucket</td></tr>
+<tr><td><code>--s3-region</code></td><td><em>(none)</em></td><td>S3 region (required if bucket set)</td></tr>
+<tr><td><code>--s3-endpoint</code></td><td><em>(none)</em></td><td>Custom S3 endpoint</td></tr>
+<tr><td><code>--s3-prefix</code></td><td><em>(none)</em></td><td>Key prefix inside bucket</td></tr>
+</tbody></table>
+</div>
+<h2 id="environment-variables-2"><a class="header" href="#environment-variables-2">Environment variables</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>VYN_RELAY_PORT</code></td><td><code>50051</code></td><td>Listening port</td></tr>
+<tr><td><code>VYN_RELAY_DATA_DIR</code></td><td><code>./.vyn-relay</code></td><td>Data directory</td></tr>
+<tr><td><code>VYN_RELAY_S3_BUCKET</code></td><td><em>(none)</em></td><td>S3 mirror bucket</td></tr>
+<tr><td><code>VYN_RELAY_S3_REGION</code></td><td><em>(none)</em></td><td>S3 region</td></tr>
+<tr><td><code>VYN_RELAY_S3_ENDPOINT</code></td><td><em>(none)</em></td><td>Custom S3 endpoint</td></tr>
+<tr><td><code>VYN_RELAY_S3_PREFIX</code></td><td><em>(none)</em></td><td>Key prefix</td></tr>
+</tbody></table>
+</div>
+<p>CLI flags override environment variables; environment variables override defaults.</p>
+<h2 id="grpc-service"><a class="header" href="#grpc-service">gRPC service</a></h2>
+<p>The relay exposes the <code>VynRelay</code> gRPC service on the configured port. See <a href="relay/../architecture/protocol.html">gRPC Protocol</a> for the full RPC reference.</p>
+<h2 id="client-configuration"><a class="header" href="#client-configuration">Client configuration</a></h2>
+<p>Set <code>storage_provider = "relay"</code> and <code>relay_url = "&lt;url&gt;"</code> in <code>.vyn/config.toml</code>:</p>
+<pre><code class="language-toml">storage_provider = "relay"
+relay_url = "https://relay.example.com"
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="system-design"><a class="header" href="#system-design">System Design</a></h1>
+<h2 id="goals"><a class="header" href="#goals">Goals</a></h2>
+<ul>
+<li><strong>Zero-knowledge security</strong> — all data is encrypted locally before leaving the machine</li>
+<li><strong>Hybrid transport</strong> — relay (gRPC) or P2P (libp2p, not yet CLI-exposed)</li>
+<li><strong>Local-first</strong> — vault works fully offline; relay is optional persistence</li>
+<li><strong>Single binary</strong> — <code>vyn</code> is both the CLI client and the relay server</li>
+</ul>
+<h2 id="high-level-architecture"><a class="header" href="#high-level-architecture">High-level architecture</a></h2>
+<pre><code>                         ┌────────────────┐
+                         │   vyn-cli      │
+                         │  (clap CLI)    │
+                         └─────┬─────────┘
+                               │ depends on
+               ┌───────────┴───────────┐
+               │        vyn-core         │
+               │  crypto / keychain /    │
+               │  manifest / diff /      │
+               │  storage / wrapping     │
+               └─────────┬──────────┘
+                         │ gRPC client
+               ┌─────────┴──────────┐
+               │       vyn-relay         │
+               │  gRPC server / store /  │
+               │  auth / S3 mirror       │
+               └───────────────────┘
+</code></pre>
+<h2 id="data-flow-summary"><a class="header" href="#data-flow-summary">Data flow summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Operation</th><th>Local</th><th>Relay</th></tr></thead><tbody>
+<tr><td><code>vyn push</code></td><td>Encrypt blobs + manifest with PK</td><td>Store ciphertext only</td></tr>
+<tr><td><code>vyn pull</code></td><td>Decrypt in memory, write to disk</td><td>Serve ciphertext</td></tr>
+<tr><td><code>vyn share</code></td><td>Wrap PK with recipient SSH key</td><td>Store wrapped invite</td></tr>
+<tr><td><code>vyn auth</code></td><td>Prove SSH key ownership</td><td>Register public key</td></tr>
+</tbody></table>
+</div>
+<h2 id="security-boundary"><a class="header" href="#security-boundary">Security boundary</a></h2>
+<p>The encryption/decryption boundary is always the local machine. The relay is a dumb ciphertext store. It authenticates clients (to prevent unauthorized writes) but never has access to the plaintext or the project key.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="crate-structure"><a class="header" href="#crate-structure">Crate Structure</a></h1>
+<p>vyn is a Cargo workspace with three crates.</p>
+<h2 id="dependency-graph"><a class="header" href="#dependency-graph">Dependency graph</a></h2>
+<pre><code>vyn-cli  ──────►  vyn-core  ──────►  vyn-relay
+           └────────────────────►  vyn-relay
+</code></pre>
+<p><code>vyn-cli</code> depends on both <code>vyn-core</code> (library logic) and <code>vyn-relay</code> (for <code>vyn serve --relay</code>). <code>vyn-core</code> depends on <code>vyn-relay</code> for the <code>RelayStorageProvider</code> gRPC client.</p>
+<h2 id="vyn-core"><a class="header" href="#vyn-core">vyn-core</a></h2>
+<p>Shared library crate. Contains all cryptographic primitives and storage abstractions.</p>
+<div class="table-wrapper"><table><thead><tr><th>Module</th><th>Responsibility</th></tr></thead><tbody>
+<tr><td><code>crypto</code></td><td>AES-256-GCM encrypt/decrypt, key generation, <code>SecretBytes</code> type</td></tr>
+<tr><td><code>keychain</code></td><td>OS keychain wrapper via keyring-rs</td></tr>
+<tr><td><code>manifest</code></td><td><code>Manifest</code> + <code>FileEntry</code> structs, versioning, serde</td></tr>
+<tr><td><code>blob</code></td><td>Encrypt file → content-addressed <code>blobs/&lt;sha256&gt;.enc</code></td></tr>
+<tr><td><code>diff</code></td><td>Binary detection + text diff via <code>similar</code></td></tr>
+<tr><td><code>merge</code></td><td>Auto-merge + conflict markers (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; LOCAL</code> / <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; REMOTE</code>)</td></tr>
+<tr><td><code>ignore</code></td><td><code>.vynignore</code> parsing via the <code>ignore</code> crate</td></tr>
+<tr><td><code>storage</code></td><td><code>StorageProvider</code> trait + <code>InMemoryStorageProvider</code></td></tr>
+<tr><td><code>relay_storage</code></td><td><code>RelayStorageProvider</code> — gRPC client implementing <code>StorageProvider</code></td></tr>
+<tr><td><code>models</code></td><td><code>VaultConfig</code>, <code>IdentityConfig</code>, <code>HistoryEntry</code></td></tr>
+<tr><td><code>wrapping</code></td><td>age-based SSH key wrapping (RSA + Ed25519)</td></tr>
+<tr><td><code>p2p</code></td><td>libp2p stub (compiled, not CLI-exposed)</td></tr>
+</tbody></table>
+</div>
+<h2 id="vyn-cli"><a class="header" href="#vyn-cli">vyn-cli</a></h2>
+<p>Binary crate. Thin command dispatch layer over <code>vyn-core</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>File</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>main.rs</code></td><td><code>clap</code> <code>Commands</code> enum with all subcommands</td></tr>
+<tr><td><code>output.rs</code></td><td>Colored terminal rendering helpers</td></tr>
+<tr><td><code>commands/init.rs</code></td><td><code>vyn init</code></td></tr>
+<tr><td><code>commands/auth.rs</code></td><td><code>vyn auth</code> — GitHub OAuth + SSH verify</td></tr>
+<tr><td><code>commands/config.rs</code></td><td><code>vyn config</code></td></tr>
+<tr><td><code>commands/push.rs</code></td><td><code>vyn push</code></td></tr>
+<tr><td><code>commands/pull.rs</code></td><td><code>vyn pull</code></td></tr>
+<tr><td><code>commands/status.rs</code></td><td><code>vyn st</code></td></tr>
+<tr><td><code>commands/diff.rs</code></td><td><code>vyn diff</code></td></tr>
+<tr><td><code>commands/share.rs</code></td><td><code>vyn share</code></td></tr>
+<tr><td><code>commands/link.rs</code></td><td><code>vyn link</code></td></tr>
+<tr><td><code>commands/serve.rs</code></td><td><code>vyn serve --relay</code></td></tr>
+<tr><td><code>commands/run.rs</code></td><td><code>vyn run</code></td></tr>
+<tr><td><code>commands/check.rs</code></td><td><code>vyn check</code></td></tr>
+<tr><td><code>commands/history.rs</code></td><td><code>vyn history</code></td></tr>
+<tr><td><code>commands/doctor.rs</code></td><td><code>vyn doctor</code></td></tr>
+<tr><td><code>commands/rotate.rs</code></td><td><code>vyn rotate</code></td></tr>
+<tr><td><code>commands/add.rs</code></td><td><code>vyn add</code></td></tr>
+<tr><td><code>commands/del.rs</code></td><td><code>vyn del</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="vyn-relay"><a class="header" href="#vyn-relay">vyn-relay</a></h2>
+<p>Relay server library. Can be embedded as a Rust library or run via <code>vyn serve</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Module</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>lib.rs</code></td><td><code>serve()</code>, <code>serve_with_config()</code>, <code>serve_with_listener()</code>, <code>ServeConfig</code></td></tr>
+<tr><td><code>service.rs</code></td><td><code>RelayService</code> — tonic gRPC service implementation</td></tr>
+<tr><td><code>store.rs</code></td><td><code>FileStore</code> — file-based blob/manifest/invite storage + S3 mirror</td></tr>
+<tr><td><code>auth.rs</code></td><td>SSH challenge-response authentication verification</td></tr>
+</tbody></table>
+</div>
+<h2 id="key-dependencies"><a class="header" href="#key-dependencies">Key dependencies</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Crate</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>ring</code></td><td>AES-256-GCM, secure random</td></tr>
+<tr><td><code>age</code> (ssh feature)</td><td>SSH key wrapping</td></tr>
+<tr><td><code>keyring</code></td><td>OS keychain</td></tr>
+<tr><td><code>similar</code></td><td>Text diffing</td></tr>
+<tr><td><code>tokio</code></td><td>Async runtime</td></tr>
+<tr><td><code>tonic</code> + <code>prost</code></td><td>gRPC client + server</td></tr>
+<tr><td><code>aws-sdk-s3</code></td><td>S3/R2 storage backend</td></tr>
+<tr><td><code>serde</code> + <code>serde_json</code> + <code>toml</code></td><td>Serialization</td></tr>
+<tr><td><code>sha2</code></td><td>Content-addressing</td></tr>
+<tr><td><code>secrecy</code></td><td>Zeroize secrets in memory</td></tr>
+<tr><td><code>reqwest</code></td><td>HTTP client (GitHub API, OAuth)</td></tr>
+<tr><td><code>clap</code></td><td>CLI argument parsing</td></tr>
+<tr><td><code>ignore</code></td><td>.vynignore parsing</td></tr>
+<tr><td><code>libp2p</code></td><td>P2P networking (stub, not CLI-exposed)</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="grpc-protocol"><a class="header" href="#grpc-protocol">gRPC Protocol</a></h1>
+<p>The relay exposes a single gRPC service defined in <code>proto/vyn.proto</code>.</p>
+<h2 id="service-definition"><a class="header" href="#service-definition">Service definition</a></h2>
+<pre><code class="language-protobuf">service VynRelay {
+  rpc Authenticate(AuthRequest) returns (AuthResponse);
+  rpc RegisterIdentity(RegisterRequest) returns (RegisterResponse);
+  rpc GetManifest(GetManifestRequest) returns (GetManifestResponse);
+  rpc PutManifest(PutManifestRequest) returns (PutManifestResponse);
+  rpc UploadBlob(stream UploadBlobChunk) returns (UploadBlobResponse);
+  rpc DownloadBlob(DownloadBlobRequest) returns (stream DownloadBlobChunk);
+  rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse);
+  rpc GetInvites(GetInvitesRequest) returns (GetInvitesResponse);
+}
+</code></pre>
+<h2 id="rpc-summary"><a class="header" href="#rpc-summary">RPC summary</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>RPC</th><th>Kind</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>Authenticate</code></td><td>Unary</td><td>SSH challenge-response. Returns a session token.</td></tr>
+<tr><td><code>RegisterIdentity</code></td><td>Unary</td><td>Register a GitHub username + SSH public key on the relay.</td></tr>
+<tr><td><code>GetManifest</code></td><td>Unary</td><td>Download the encrypted manifest for a vault.</td></tr>
+<tr><td><code>PutManifest</code></td><td>Unary</td><td>Upload (replace) the encrypted manifest for a vault.</td></tr>
+<tr><td><code>UploadBlob</code></td><td>Client streaming</td><td>Upload an encrypted blob in chunks.</td></tr>
+<tr><td><code>DownloadBlob</code></td><td>Server streaming</td><td>Download an encrypted blob in chunks.</td></tr>
+<tr><td><code>CreateInvite</code></td><td>Unary</td><td>Upload an age-encrypted invite for a specific user.</td></tr>
+<tr><td><code>GetInvites</code></td><td>Unary</td><td>Fetch all invites for a user/vault pair.</td></tr>
+</tbody></table>
+</div>
+<h2 id="authentication"><a class="header" href="#authentication">Authentication</a></h2>
+<p>The relay uses a two-step challenge-response:</p>
+<ol>
+<li><strong>RegisterIdentity</strong> — client registers <code>user_id</code> + <code>public_key</code> + an SSH signature over <code>"vyn-register:{user_id}:{public_key}"</code> proving key ownership</li>
+<li><strong>Authenticate</strong> — client signs a relay-issued nonce with their private key; relay returns a bearer token used in subsequent requests</li>
+</ol>
+<h2 id="streaming-blobs"><a class="header" href="#streaming-blobs">Streaming blobs</a></h2>
+<p><code>UploadBlob</code> and <code>DownloadBlob</code> use gRPC streaming to handle large blobs efficiently without buffering the entire ciphertext in memory.</p>
+<pre><code class="language-protobuf">message UploadBlobChunk {
+  string hash = 1;   // SHA-256 of the plaintext (blob identifier)
+  bytes  chunk = 2;  // ciphertext chunk
+}
+
+message DownloadBlobChunk {
+  bytes chunk = 1;   // ciphertext chunk
+}
+</code></pre>
+<h2 id="proto-source"><a class="header" href="#proto-source">Proto source</a></h2>
+<p>The canonical proto source is <a href="https://github.com/arnonsang/vyn/blob/main/proto/vyn.proto"><code>proto/vyn.proto</code></a>. It is bundled into <code>crates/vyn-relay/proto/</code> for publishing.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li>Rust (Edition 2024, stable)</li>
+<li><code>protoc</code> is <strong>not</strong> required — <code>vyn-relay</code> uses <code>protoc-bin-vendored</code> which vendors the compiler</li>
+</ul>
+<h2 id="build"><a class="header" href="#build">Build</a></h2>
+<pre><code class="language-bash">git clone https://github.com/arnonsang/vyn.git
+cd vyn
+cargo build
+</code></pre>
+<p>Build the release binary:</p>
+<pre><code class="language-bash">cargo build --release
+# binary: target/release/vyn
+</code></pre>
+<h2 id="test"><a class="header" href="#test">Test</a></h2>
+<pre><code class="language-bash">cargo test --workspace
+</code></pre>
+<p>Relay integration tests use the <code>test-bypass-auth</code> feature to skip SSH challenge-response:</p>
+<pre><code class="language-bash">cargo test -p vyn-core --features vyn-relay/test-bypass-auth
+</code></pre>
+<h2 id="workspace-layout"><a class="header" href="#workspace-layout">Workspace layout</a></h2>
+<pre><code>vyn/
+├── Cargo.toml           # workspace root
+├── proto/vyn.proto      # canonical gRPC definition
+└── crates/
+    ├── vyn-core/
+    ├── vyn-cli/
+    └── vyn-relay/
+</code></pre>
+<h2 id="updating-the-proto"><a class="header" href="#updating-the-proto">Updating the proto</a></h2>
+<p>Edit <code>proto/vyn.proto</code> (the canonical source). Regeneration happens automatically at build time via <code>vyn-relay/build.rs</code> using <code>tonic-build</code>.</p>
+<p>After editing, copy the updated proto to the bundled path:</p>
+<pre><code class="language-bash">cp proto/vyn.proto crates/vyn-relay/proto/vyn.proto
+</code></pre>
+<h2 id="code-style"><a class="header" href="#code-style">Code style</a></h2>
+<ul>
+<li><code>cargo fmt</code> before committing</li>
+<li><code>cargo clippy --workspace</code> — no warnings</li>
+<li>All crypto paths go through <code>vyn-core::crypto</code> — do not call <code>ring</code> APIs directly in <code>vyn-cli</code></li>
+</ul>
+<h2 id="docs"><a class="header" href="#docs">Docs</a></h2>
+<p>This documentation site is built with <a href="https://rust-lang.github.io/mdBook/">mdBook</a>. Sources are in <code>docs/src/</code>.</p>
+<pre><code class="language-bash"># Install mdbook
+cargo install mdbook mdbook-mermaid
+
+# Serve locally
+cd docs &amp;&amp; mdbook serve
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="api-reference"><a class="header" href="#api-reference">API Reference</a></h1>
+<p>vyn is published as three crates on <a href="https://crates.io">crates.io</a>. Full rustdoc is available on <a href="https://docs.rs">docs.rs</a>.</p>
+<h2 id="vyn-core-1"><a class="header" href="#vyn-core-1">vyn-core</a></h2>
+<p><a href="https://docs.rs/vyn-core"><img src="https://img.shields.io/docsrs/vyn-core" alt="docs.rs" /></a>
+<a href="https://crates.io/crates/vyn-core"><img src="https://img.shields.io/crates/v/vyn-core" alt="crates.io" /></a></p>
+<p>Core library providing all cryptographic primitives and storage abstractions.</p>
+<p><strong>Key modules:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Module</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>crypto</code></td><td>AES-256-GCM encrypt/decrypt, key generation, <code>SecretBytes</code></td></tr>
+<tr><td><code>keychain</code></td><td>OS keychain wrapper (keyring-rs)</td></tr>
+<tr><td><code>manifest</code></td><td><code>Manifest</code> + <code>FileEntry</code>, versioning, serde</td></tr>
+<tr><td><code>blob</code></td><td>Content-addressed encrypted blob storage</td></tr>
+<tr><td><code>diff</code></td><td>Binary detection + text diff via <code>similar</code></td></tr>
+<tr><td><code>merge</code></td><td>Auto-merge + conflict markers</td></tr>
+<tr><td><code>ignore</code></td><td><code>.vynignore</code> parsing</td></tr>
+<tr><td><code>storage</code></td><td><code>StorageProvider</code> trait + <code>InMemoryStorageProvider</code></td></tr>
+<tr><td><code>relay_storage</code></td><td><code>RelayStorageProvider</code> (gRPC client)</td></tr>
+<tr><td><code>models</code></td><td><code>VaultConfig</code>, <code>IdentityConfig</code>, <code>HistoryEntry</code></td></tr>
+<tr><td><code>wrapping</code></td><td>age-based SSH key wrapping</td></tr>
+<tr><td><code>p2p</code></td><td>libp2p stub (not CLI-exposed)</td></tr>
+</tbody></table>
+</div>
+<p><a href="https://docs.rs/vyn-core">View on docs.rs →</a></p>
+<hr />
+<h2 id="vyn-relay-1"><a class="header" href="#vyn-relay-1">vyn-relay</a></h2>
+<p><a href="https://docs.rs/vyn-relay"><img src="https://img.shields.io/docsrs/vyn-relay" alt="docs.rs" /></a>
+<a href="https://crates.io/crates/vyn-relay"><img src="https://img.shields.io/crates/v/vyn-relay" alt="crates.io" /></a></p>
+<p>Relay server library. Embed the relay directly as a Rust library or run it via <code>vyn serve --relay</code>.</p>
+<p><strong>Key exports:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Symbol</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>serve()</code></td><td>Start relay with default config</td></tr>
+<tr><td><code>serve_with_config(ServeConfig)</code></td><td>Start relay with custom config</td></tr>
+<tr><td><code>serve_with_listener(TcpListener, ServeConfig)</code></td><td>Start relay on a pre-bound listener</td></tr>
+<tr><td><code>ServeConfig</code></td><td>Port, data dir, S3 config</td></tr>
+</tbody></table>
+</div>
+<p><a href="https://docs.rs/vyn-relay">View on docs.rs →</a></p>
+<hr />
+<h2 id="vyn-cli-1"><a class="header" href="#vyn-cli-1">vyn-cli</a></h2>
+<p><a href="https://crates.io/crates/vyn-cli"><img src="https://img.shields.io/crates/v/vyn-cli" alt="crates.io" /></a></p>
+<p>End-user binary crate. Not intended as a library — install with <code>cargo install vyn-cli</code>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
