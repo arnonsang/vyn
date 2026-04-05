@@ -28,7 +28,7 @@
 - `crates/vyn-core`: crypto, keychain, manifest, storage, diff/merge, p2p
 - `crates/vyn-cli`: end-user CLI command surface
 - `crates/vyn-relay`: gRPC relay service implementation
-- `proto/vyn.proto`: relay API contract
+- `proto/vyn.proto`: relay API contract (canonical source; bundled into `crates/vyn-relay/proto/` for publishing)
 
 ## Install
 

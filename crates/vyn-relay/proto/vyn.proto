@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package vyn;
+
+service VynRelay {
+  rpc Authenticate(AuthRequest) returns (AuthResponse);
+  rpc RegisterIdentity(RegisterRequest) returns (RegisterResponse);
+  rpc GetManifest(GetManifestRequest) returns (GetManifestResponse);
+  rpc PutManifest(PutManifestRequest) returns (PutManifestResponse);
+  rpc UploadBlob(stream UploadBlobChunk) returns (UploadBlobResponse);
+  rpc DownloadBlob(DownloadBlobRequest) returns (stream DownloadBlobChunk);
+  rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse);
+  rpc GetInvites(GetInvitesRequest) returns (GetInvitesResponse);
+}
+
+message AuthRequest {
+  string user_id = 1;
+  bytes nonce = 2;
+  string signature = 3;
+}
+
+message AuthResponse {
+  bool authenticated = 1;
+  bytes challenge_nonce = 2;
+  string message = 3;
+  string token = 4;
+}
+
+message RegisterRequest {
+  string user_id = 1;
+  string public_key = 2;
+  // SSH signature over "vyn-register:{user_id}:{public_key}" proving key ownership.
+  string signature = 3;
+}
+
+message RegisterResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message GetManifestRequest {
+  string project_id = 1;
+}
+
+message GetManifestResponse {
+  bytes payload = 1;
+  bool found = 2;
+}
+
+message PutManifestRequest {
+  string project_id = 1;
+  bytes payload = 2;
+}
+
+message PutManifestResponse {
+  bool ok = 1;
+}
+
+message UploadBlobChunk {
+  string hash = 1;
+  bytes chunk = 2;
+}
+
+message UploadBlobResponse {
+  bool ok = 1;
+}
+
+message DownloadBlobRequest {
+  string hash = 1;
+}
+
+message DownloadBlobChunk {
+  bytes chunk = 1;
+}
+
+message CreateInviteRequest {
+  string user_id = 1;
+  string vault_id = 2;
+  bytes payload = 3;
+}
+
+message CreateInviteResponse {
+  bool ok = 1;
+}
+
+message GetInvitesRequest {
+  string user_id = 1;
+  string vault_id = 2;
+}
+
+message GetInvitesResponse {
+  repeated bytes payloads = 1;
+}

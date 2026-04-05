@@ -2,8 +2,8 @@
 # publish.sh - Publish all vyn crates to crates.io in dependency order.
 #
 # Publish order is mandatory:
-#   1. vyn-core   (no local deps)
-#   2. vyn-relay  (depends on vyn-core)
+#   1. vyn-relay  (no local deps)
+#   2. vyn-core   (depends on vyn-relay)
 #   3. vyn-cli    (depends on vyn-core + vyn-relay)
 #
 # Usage:
@@ -16,7 +16,7 @@
 
 set -euo pipefail
 
-CRATES=(vyn-core vyn-relay vyn-cli)
+CRATES=(vyn-relay vyn-core vyn-cli)
 DRY_RUN=false
 DELAY=40   # seconds to wait between publishes for crates.io index to update
 
@@ -87,9 +87,18 @@ for i in "${!CRATES[@]}"; do
   step "[$((i+1))/${#CRATES[@]}] $crate"
 
   if $DRY_RUN; then
-    log "dry-run: cargo publish --dry-run --allow-dirty -p $crate"
-    cargo publish --dry-run --allow-dirty -p "$crate"
-    ok "$crate: dry run passed"
+    if [[ $i -eq 0 ]]; then
+      # First crate has no local deps — full publish dry-run works fine.
+      log "dry-run: cargo publish --dry-run --allow-dirty -p $crate"
+      cargo publish --dry-run --allow-dirty -p "$crate"
+      ok "$crate: dry run passed"
+    else
+      # Dependent crates can't be dry-run-verified until the preceding crate is
+      # indexed on crates.io. The workspace build check above already validates
+      # compilation for these crates.
+      log "skipping publish dry-run for $crate (depends on local crates not yet indexed; workspace build already validated)"
+      ok "$crate: skipped (workspace build passed)"
+    fi
   else
     log "publishing $crate…"
     cargo publish --allow-dirty -p "$crate"

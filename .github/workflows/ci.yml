@@ -1,0 +1,28 @@
+name: CI (Tests & Lint)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  check:
+    name: Quality Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Rustfmt Check
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (Linter)
+        run: cargo clippy -- -D warnings
+
+      - name: Run Tests
+        run: cargo test --all-features
