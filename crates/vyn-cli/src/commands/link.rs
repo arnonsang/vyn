@@ -76,8 +76,7 @@ pub fn run(vault_id: String) -> Result<()> {
             })?;
         output::finish_progress(&spinner2, "invite decrypted");
 
-        store_project_key(&vault_id, &key)
-            .context("failed to store project key in keychain")?;
+        store_project_key(&vault_id, &key).context("failed to store project key in keychain")?;
 
         let config_path = vault_dir.join("config.toml");
         if let Ok(text) = fs::read_to_string(&config_path)
