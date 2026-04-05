@@ -5,6 +5,8 @@ use anyhow::{Context, Result};
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use vyn_core::keychain::load_project_key;
+use vyn_core::relay_storage::RelayStorageProvider;
+use vyn_core::storage::StorageProvider;
 use vyn_core::wrapping::wrap_project_key_for_ssh_recipient;
 
 use crate::output;
@@ -12,6 +14,8 @@ use crate::output;
 #[derive(Debug, Deserialize)]
 struct VaultConfig {
     vault_id: String,
+    storage_provider: String,
+    relay_url: Option<String>,
 }
 
 pub fn run(user: String) -> Result<()> {
@@ -22,7 +26,8 @@ pub fn run(user: String) -> Result<()> {
         anyhow::bail!("username must not be empty");
     }
 
-    let vault_id = load_vault_id(&root)?;
+    let config = load_config(&root)?;
+    let vault_id = config.vault_id.clone();
     let key = load_project_key(&vault_id).context("failed to load project key from keychain")?;
 
     let spinner = output::new_spinner(&format!("fetching SSH keys for @{username}…"));
@@ -36,42 +41,68 @@ pub fn run(user: String) -> Result<()> {
     }
     output::finish_progress(&spinner, &format!("{} SSH key(s) found", public_keys.len()));
 
-    let invites_dir = root.join(".vyn").join("invites");
-    fs::create_dir_all(&invites_dir).context("failed to create invite directory")?;
+    let relay_url = config
+        .relay_url
+        .clone()
+        .context("missing `relay_url` in .vyn/config.toml — run `vyn config` to set it")?;
 
-    let mut created = 0usize;
-    for (idx, public_key) in public_keys.iter().enumerate() {
-        if let Ok(payload) = wrap_project_key_for_ssh_recipient(&key, public_key) {
-            let path = invites_dir.join(format!("{}__{}__{}.age", vault_id, username, idx));
-            fs::write(&path, payload)
-                .with_context(|| format!("failed to write invite file: {}", path.display()))?;
-            created += 1;
+    if config.storage_provider != "relay" {
+        anyhow::bail!(
+            "relay-based invite sharing requires `storage_provider = \"relay\"` in .vyn/config.toml"
+        );
+    }
+
+    let vault_dir = root.join(".vyn");
+    let runtime = tokio::runtime::Runtime::new().context("failed to create tokio runtime")?;
+    runtime.block_on(async {
+        let provider = RelayStorageProvider::new(relay_url);
+        provider
+            .authenticate_with_identity(&vault_dir)
+            .await
+            .context("relay authentication failed (run `vyn auth` first)")?;
+
+        let spinner2 = output::new_spinner(&format!("uploading invite(s) for @{username}…"));
+        let mut uploaded = 0usize;
+        for public_key in &public_keys {
+            match wrap_project_key_for_ssh_recipient(&key, public_key) {
+                Ok(payload) => {
+                    provider
+                        .create_invite(&username, &vault_id, payload)
+                        .await
+                        .context("failed to upload invite to relay")?;
+                    uploaded += 1;
+                }
+                Err(e) => {
+                    eprintln!("warning: could not wrap key for one SSH key: {e}");
+                }
+            }
         }
-    }
 
-    if created == 0 {
-        anyhow::bail!("unable to encrypt invites with any of @{username}'s SSH public keys");
-    }
+        if uploaded == 0 {
+            output::fail_progress(&spinner2, "no invites could be created");
+            anyhow::bail!("unable to encrypt invites with any of @{username}'s SSH public keys");
+        }
+        output::finish_progress(&spinner2, &format!("{uploaded} invite(s) uploaded"));
 
-    output::print_success(&format!(
-        "created {created} encrypted invite(s) for @{username}"
-    ));
-    output::print_info("vault id", &vault_id);
-    output::print_info(
-        "next step",
-        "send the .age file(s) in .vyn/invites/ to the recipient",
-    );
-    println!();
+        output::print_success(&format!("invite sent to @{username}"));
+        output::print_info("vault id", &vault_id);
+        output::print_info(
+            "next step",
+            &format!("@{username} can now run: vyn link {vault_id}"),
+        );
+        println!();
+
+        Ok::<(), anyhow::Error>(())
+    })?;
+
     Ok(())
 }
 
-fn load_vault_id(root: &Path) -> Result<String> {
+fn load_config(root: &Path) -> Result<VaultConfig> {
     let config_path = root.join(".vyn").join("config.toml");
     let config_text = fs::read_to_string(&config_path)
         .with_context(|| format!("missing or unreadable file: {}", config_path.display()))?;
-    let config: VaultConfig =
-        toml::from_str(&config_text).context("invalid .vyn/config.toml format")?;
-    Ok(config.vault_id)
+    toml::from_str(&config_text).context("invalid .vyn/config.toml format")
 }
 
 fn fetch_github_public_keys(username: &str) -> Result<Vec<String>> {
