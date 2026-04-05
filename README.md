@@ -27,6 +27,9 @@
 
 - [Project Layout](#project-layout)
 - [Install](#install)
+  - [Option A: Install from crates.io (recommended)](#option-a-install-from-cratesio-recommended)
+  - [Option B: Pre-built binary](#option-b-pre-built-binary)
+  - [Option C: Build from source](#option-c-build-from-source)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
 - [Relay Deployment](#relay-deployment)
@@ -53,7 +56,27 @@ cargo install vyn-cli
 vyn --help
 ```
 
-### Option B: Build from source
+### Option B: Pre-built binary
+
+No Rust toolchain required. Auto-detects your OS and architecture.
+
+**Linux / macOS**
+
+```bash
+curl -fsSL https://github.com/arnonsang/vyn/releases/latest/download/install.sh | sh
+```
+
+or with wget:
+
+```bash
+wget -qO- https://github.com/arnonsang/vyn/releases/latest/download/install.sh | sh
+```
+
+**Windows**
+
+Download `vyn-x86_64-pc-windows-msvc.zip` from [releases](https://github.com/arnonsang/vyn/releases/latest), extract, and add `vyn.exe` to a directory in your `PATH`.
+
+### Option C: Build from source
 
 ```bash
 git clone https://github.com/arnonsang/vyn.git
