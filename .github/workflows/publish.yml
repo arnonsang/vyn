@@ -20,7 +20,7 @@ jobs:
         run: cargo test --all-features
 
   publish:
-    name: Publish Crate
+    name: Publish Crates
     needs: pre-publish
     runs-on: ubuntu-latest
     steps:
@@ -31,5 +31,17 @@ jobs:
         uses: rust-lang/crates-io-auth-action@v0.1.3
         id: auth
 
-      - name: Cargo Publish
-        run: cargo publish --token ${{ steps.auth.outputs.token }}
+      - name: Publish vyn-relay
+        run: cargo publish -p vyn-relay --token ${{ steps.auth.outputs.token }}
+
+      - name: Wait for vyn-relay to be indexed
+        run: sleep 40
+
+      - name: Publish vyn-core
+        run: cargo publish -p vyn-core --token ${{ steps.auth.outputs.token }}
+
+      - name: Wait for vyn-core to be indexed
+        run: sleep 40
+
+      - name: Publish vyn-cli
+        run: cargo publish -p vyn-cli --token ${{ steps.auth.outputs.token }}

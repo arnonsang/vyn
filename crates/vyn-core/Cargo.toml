@@ -5,6 +5,7 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Core library for vyn. Crypto, keychain, manifest, storage, and diff engine"
+readme = "README.md"
 
 [dependencies]
 age = { workspace = true, features = ["ssh"] }
@@ -22,9 +23,9 @@ tokio = { workspace = true, features = ["time"] }
 tempfile = "3"
 tokio-stream = "0.1"
 tonic.workspace = true
-vyn-relay = { path = "../vyn-relay", version = "0.1.0" }
+vyn-relay = { path = "../vyn-relay", version = "0.1.1" }
 walkdir.workspace = true
 
 [dev-dependencies]
 uuid.workspace = true
-vyn-relay = { path = "../vyn-relay", version = "0.1.0", features = ["test-bypass-auth"] }
+vyn-relay = { path = "../vyn-relay", version = "0.1.1", features = ["test-bypass-auth"] }
