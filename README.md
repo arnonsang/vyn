@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo_light_transparent.png" alt="vyn logo" width="100" />
+  <img src="https://raw.githubusercontent.com/arnonsang/vyn/fdf6641affa94e39d08f06afa90912e8b0bb92d0/assets/logo_light_transparent.png" alt="vyn logo" width="100" />
   <br />
   <h1 align="center">vyn</h1>
   <p align="center">Encrypted env/config sync CLI for teams. Helps you encrypt, sync, diff, share, and run environment/config files with a local-first workflow and optional relay/S3 storage.</p>
