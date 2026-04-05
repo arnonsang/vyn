@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -28,7 +29,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
 
       - name: Authenticate with crates.io
-        uses: rust-lang/crates-io-auth-action@v0.1.3
+        uses: rust-lang/crates-io-auth-action@v1.0.4
         id: auth
 
       - name: Publish vyn-relay
