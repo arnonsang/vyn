@@ -8,7 +8,7 @@
     <a href="https://crates.io/crates/vyn-core"><img src="https://img.shields.io/crates/v/vyn-core?label=vyn-core&color=7fc97f" alt="crates.io vyn-core" /></a>
     <a href="https://crates.io/crates/vyn-relay"><img src="https://img.shields.io/crates/v/vyn-relay?label=vyn-relay&color=beaed4" alt="crates.io vyn-relay" /></a>
     <a href="https://github.com/arnonsang/vyn/actions"><img src="https://img.shields.io/github/actions/workflow/status/arnonsang/vyn/ci.yml?label=CI" alt="CI" /></a>
-    <a href="LICENSE"><img src="https://img.shields.io/crates/l/vyn-cli" alt="license" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="license" /></a>
   </p>
 </p>
 
