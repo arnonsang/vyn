@@ -11,6 +11,8 @@ service VynRelay {
   rpc DownloadBlob(DownloadBlobRequest) returns (stream DownloadBlobChunk);
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse);
   rpc GetInvites(GetInvitesRequest) returns (GetInvitesResponse);
+  rpc ListVaults(ListVaultsRequest) returns (ListVaultsResponse);
+  rpc ListBlobs(ListBlobsRequest) returns (ListBlobsResponse);
 }
 
 message AuthRequest {
@@ -90,4 +92,23 @@ message GetInvitesRequest {
 
 message GetInvitesResponse {
   repeated bytes payloads = 1;
+}
+
+message ListVaultsRequest {}
+
+message ListVaultsResponse {
+  repeated string vault_ids = 1;
+}
+
+message ListBlobsRequest {
+  string vault_id = 1;
+}
+
+message BlobInfo {
+  string sha256 = 1;
+  uint64 size_bytes = 2;
+}
+
+message ListBlobsResponse {
+  repeated BlobInfo blobs = 1;
 }

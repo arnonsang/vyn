@@ -5,10 +5,12 @@ language = "en"
 src = "src"
 
 [output.html]
+theme = "theme"
 site-url = "/vyn/"
 git-repository-url = "https://github.com/arnonsang/vyn"
 edit-url-template = "https://github.com/arnonsang/vyn/edit/main/docs/src/{path}"
 additional-js = ["mermaid.min.js", "mermaid-init.js"]
+additional-css = ["theme/custom.css"]
 
 [preprocessor.mermaid]
 command = "mdbook-mermaid"

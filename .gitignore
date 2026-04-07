@@ -12,3 +12,4 @@ docs/local/
 # workspace
 .devcontainer/
 .vscode/
+AGENTS.md

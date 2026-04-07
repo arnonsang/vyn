@@ -9,6 +9,9 @@ readme = "README.md"
 
 [dependencies]
 age = { workspace = true, features = ["ssh"] }
+anyhow.workspace = true
+dirs.workspace = true
+hex.workspace = true
 ignore.workspace = true
 keyring.workspace = true
 libp2p.workspace = true
@@ -20,12 +23,13 @@ sha2.workspace = true
 similar.workspace = true
 thiserror.workspace = true
 tokio = { workspace = true, features = ["time"] }
+toml.workspace = true
 tempfile = "3"
 tokio-stream = "0.1"
 tonic.workspace = true
-vyn-relay = { path = "../vyn-relay", version = "0.1.1" }
+vyn-relay = { path = "../vyn-relay", version = "0.1.3" }
 walkdir.workspace = true
 
 [dev-dependencies]
 uuid.workspace = true
-vyn-relay = { path = "../vyn-relay", version = "0.1.1", features = ["test-bypass-auth"] }
+vyn-relay = { path = "../vyn-relay", version = "0.1.3", features = ["test-bypass-auth"] }

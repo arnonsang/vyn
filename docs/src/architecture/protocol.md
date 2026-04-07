@@ -14,6 +14,8 @@ service VynRelay {
   rpc DownloadBlob(DownloadBlobRequest) returns (stream DownloadBlobChunk);
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse);
   rpc GetInvites(GetInvitesRequest) returns (GetInvitesResponse);
+  rpc ListVaults(ListVaultsRequest) returns (ListVaultsResponse);
+  rpc ListBlobs(ListBlobsRequest) returns (ListBlobsResponse);
 }
 ```
 
@@ -29,6 +31,8 @@ service VynRelay {
 | `DownloadBlob` | Server streaming | Download an encrypted blob in chunks. |
 | `CreateInvite` | Unary | Upload an age-encrypted invite for a specific user. |
 | `GetInvites` | Unary | Fetch all invites for a user/vault pair. |
+| `ListVaults` | Unary | List vault IDs accessible to the authenticated user. |
+| `ListBlobs` | Unary | List blob hashes and sizes inside a specific vault. |
 
 ## Authentication
 

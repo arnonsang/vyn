@@ -5,7 +5,7 @@
 Run a subprocess with env vars injected from `.env` files and encrypted vault blobs.
 
 ```bash
-vyn run -- <cmd...>
+vyn run <cmd...>
 ```
 
 **What it does:**
@@ -18,8 +18,8 @@ vyn run -- <cmd...>
 **Example:**
 
 ```bash
-vyn run -- node server.js
-vyn run -- docker compose up
+vyn run node server.js
+vyn run docker compose up
 ```
 
 ---
@@ -83,3 +83,38 @@ vyn rotate
 3. Updates the OS keychain with the new key
 4. Rebuilds invite files for known teammates
 5. Writes a history entry
+
+---
+
+## vyn update
+
+Check for a newer version and print upgrade instructions.
+
+```bash
+vyn update
+```
+
+Options:
+- `--check` — only report whether a newer version is available, without printing upgrade instructions
+
+**What it does:**
+
+1. Fetches the latest published version from crates.io
+2. Compares with the current binary version
+3. If up to date, exits cleanly
+4. If a newer version is available, prints instructions tailored to how vyn was installed (binary, cargo, or Docker)
+
+**Example:**
+
+```bash
+vyn update
+# vyn v0.1.2 is installed. v0.1.3 is available.
+#
+# Run the following to update:
+#   curl -fsSL https://github.com/arnonsang/vyn/releases/latest/download/install.sh | sh
+```
+
+```bash
+vyn update --check
+# vyn v0.1.2 is installed. v0.1.3 is available.
+```

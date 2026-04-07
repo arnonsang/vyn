@@ -7,7 +7,7 @@ use serde::Deserialize;
 use vyn_core::keychain::load_project_key;
 use vyn_core::relay_storage::RelayStorageProvider;
 use vyn_core::storage::StorageProvider;
-use vyn_core::wrapping::wrap_project_key_for_ssh_recipient;
+use vyn_core::wrapping::wrap_invite_for_ssh_recipient;
 
 use crate::output;
 
@@ -55,7 +55,8 @@ pub fn run(user: String) -> Result<()> {
     let vault_dir = root.join(".vyn");
     let runtime = tokio::runtime::Runtime::new().context("failed to create tokio runtime")?;
     runtime.block_on(async {
-        let provider = RelayStorageProvider::new(relay_url);
+        let relay_url_opt = Some(relay_url.as_str());
+        let provider = RelayStorageProvider::new(relay_url.clone());
         provider
             .authenticate_with_identity(&vault_dir)
             .await
@@ -64,7 +65,7 @@ pub fn run(user: String) -> Result<()> {
         let spinner2 = output::new_spinner(&format!("uploading invite(s) for @{username}…"));
         let mut uploaded = 0usize;
         for public_key in &public_keys {
-            match wrap_project_key_for_ssh_recipient(&key, public_key) {
+            match wrap_invite_for_ssh_recipient(&key, &vault_id, relay_url_opt, public_key) {
                 Ok(payload) => {
                     provider
                         .create_invite(&username, &vault_id, payload)

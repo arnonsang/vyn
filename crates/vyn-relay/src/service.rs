@@ -317,4 +317,37 @@ impl VynRelay for RelayService {
 
         Ok(Response::new(GetInvitesResponse { payloads }))
     }
+
+    async fn list_vaults(
+        &self,
+        request: Request<ListVaultsRequest>,
+    ) -> Result<Response<ListVaultsResponse>, Status> {
+        require_auth(&request, &*self.sessions.read().await)?;
+
+        let vault_ids = self
+            .store
+            .list_vaults()
+            .context("failed to list vaults")
+            .map_err(|e| Status::internal(e.to_string()))?;
+
+        Ok(Response::new(ListVaultsResponse { vault_ids }))
+    }
+
+    async fn list_blobs(
+        &self,
+        request: Request<ListBlobsRequest>,
+    ) -> Result<Response<ListBlobsResponse>, Status> {
+        require_auth(&request, &*self.sessions.read().await)?;
+
+        let blobs = self
+            .store
+            .list_blobs()
+            .context("failed to list blobs")
+            .map_err(|e| Status::internal(e.to_string()))?
+            .into_iter()
+            .map(|(sha256, size_bytes)| BlobInfo { sha256, size_bytes })
+            .collect();
+
+        Ok(Response::new(ListBlobsResponse { blobs }))
+    }
 }

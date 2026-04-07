@@ -7,6 +7,7 @@ use vyn_core::keychain::load_project_key;
 use vyn_core::manifest::Manifest;
 
 use crate::output;
+use crate::version::{VersionStatus, check_for_update};
 
 #[derive(Debug, Deserialize)]
 struct VaultConfig {
@@ -55,6 +56,20 @@ pub fn run() -> Result<()> {
 
 fn run_checks(root: &Path) -> Result<Vec<CheckResult>> {
     let mut out = Vec::new();
+
+    // Version check is always first -- most immediately actionable info.
+    let current = env!("CARGO_PKG_VERSION");
+    match check_for_update(true) {
+        VersionStatus::UpdateAvailable(latest) => out.push(fail(
+            "cli_version",
+            &format!("vyn v{current} installed, v{latest} available -- run 'vyn update'"),
+        )),
+        VersionStatus::UpToDate => out.push(ok("cli_version", &format!("vyn v{current} (latest)"))),
+        VersionStatus::CheckFailed => out.push(ok(
+            "cli_version",
+            &format!("vyn v{current} (could not check for updates)"),
+        )),
+    }
 
     let vault_dir = root.join(".vyn");
     if vault_dir.exists() && vault_dir.is_dir() {

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use vyn_core::keychain::store_project_key;
 use vyn_core::relay_storage::RelayStorageProvider;
 use vyn_core::storage::StorageProvider;
-use vyn_core::wrapping::unwrap_project_key_with_ssh_identity_file;
+use vyn_core::wrapping::unwrap_invite_with_ssh_identity_file;
 
 use crate::output;
 
@@ -59,14 +59,11 @@ pub fn run(vault_id: String) -> Result<()> {
         output::finish_progress(&spinner, &format!("{} invite(s) found", invites.len()));
 
         let spinner2 = output::new_spinner("decrypting invite…");
-        let key = invites
+        let invite = invites
             .iter()
             .find_map(|payload| {
-                unwrap_project_key_with_ssh_identity_file(
-                    payload,
-                    Path::new(&identity.ssh_private_key),
-                )
-                .ok()
+                unwrap_invite_with_ssh_identity_file(payload, Path::new(&identity.ssh_private_key))
+                    .ok()
             })
             .with_context(|| {
                 format!(
@@ -76,21 +73,50 @@ pub fn run(vault_id: String) -> Result<()> {
             })?;
         output::finish_progress(&spinner2, "invite decrypted");
 
-        store_project_key(&vault_id, &key).context("failed to store project key in keychain")?;
+        let resolved_vault_id = if !invite.vault_id.is_empty() {
+            invite.vault_id.clone()
+        } else {
+            vault_id.clone()
+        };
 
+        store_project_key(&resolved_vault_id, &invite.key)
+            .context("failed to store project key in keychain")?;
+
+        // Bootstrap .vyn/ config from embedded invite metadata.
         let config_path = vault_dir.join("config.toml");
-        if let Ok(text) = fs::read_to_string(&config_path)
-            && let Ok(mut cfg) = toml::from_str::<VaultConfig>(&text)
+        let storage_provider = if invite.relay_url.is_some() {
+            "relay"
+        } else {
+            "unconfigured"
+        };
+        let mut cfg = if let Ok(text) = fs::read_to_string(&config_path)
+            && let Ok(existing) = toml::from_str::<VaultConfig>(&text)
         {
-            cfg.vault_id = vault_id.clone();
-            if let Ok(serialized) = toml::to_string_pretty(&cfg) {
-                let _ = fs::write(&config_path, serialized);
+            existing
+        } else {
+            VaultConfig {
+                vault_id: resolved_vault_id.clone(),
+                project_name: None,
+                storage_provider: storage_provider.to_string(),
+                relay_url: invite.relay_url.clone(),
             }
+        };
+        cfg.vault_id = resolved_vault_id.clone();
+        if invite.relay_url.is_some() {
+            cfg.relay_url = invite.relay_url.clone();
+            cfg.storage_provider = "relay".to_string();
+        }
+        fs::create_dir_all(&vault_dir).context("failed to create .vyn directory")?;
+        if let Ok(serialized) = toml::to_string_pretty(&cfg) {
+            let _ = fs::write(&config_path, serialized);
         }
 
-        output::print_success(&format!("vault {vault_id} linked"));
+        output::print_success(&format!("vault {resolved_vault_id} linked"));
         output::print_info("identity", &format!("@{}", identity.github_username));
         output::print_info("key stored", "OS keychain");
+        if let Some(ref url) = invite.relay_url {
+            output::print_info("relay", url);
+        }
         println!();
 
         Ok::<(), anyhow::Error>(())

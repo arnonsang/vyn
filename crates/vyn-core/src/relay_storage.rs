@@ -252,6 +252,40 @@ impl StorageProvider for RelayStorageProvider {
     }
 }
 
+impl RelayStorageProvider {
+    /// Lists all vault IDs on the relay (requires auth token).
+    pub async fn list_vaults(&self) -> StorageResult<Vec<String>> {
+        let mut client = self.connect().await?;
+        let mut request = tonic::Request::new(vyn_relay::proto::ListVaultsRequest {});
+        request = self.inject_token(request).await?;
+        let response = client
+            .list_vaults(request)
+            .await
+            .map_err(|err| StorageError::Transport(err.to_string()))?
+            .into_inner();
+        Ok(response.vault_ids)
+    }
+
+    /// Lists all blobs on the relay (requires auth token).
+    pub async fn list_blobs(&self) -> StorageResult<Vec<(String, u64)>> {
+        let mut client = self.connect().await?;
+        let mut request = tonic::Request::new(vyn_relay::proto::ListBlobsRequest {
+            vault_id: String::new(),
+        });
+        request = self.inject_token(request).await?;
+        let response = client
+            .list_blobs(request)
+            .await
+            .map_err(|err| StorageError::Transport(err.to_string()))?
+            .into_inner();
+        Ok(response
+            .blobs
+            .into_iter()
+            .map(|b| (b.sha256, b.size_bytes))
+            .collect())
+    }
+}
+
 struct IdentityConfig {
     github_username: String,
     ssh_private_key: String,

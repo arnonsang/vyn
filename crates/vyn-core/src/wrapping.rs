@@ -8,6 +8,13 @@ use thiserror::Error;
 
 use crate::crypto::{SecretBytes, secret_bytes};
 
+/// Structured invite payload produced by `unwrap_invite_with_ssh_identity_file`.
+pub struct InvitePayload {
+    pub vault_id: String,
+    pub relay_url: Option<String>,
+    pub key: SecretBytes,
+}
+
 #[derive(Debug, Error)]
 pub enum WrappingError {
     #[error("invalid recipient public key: {0}")]
@@ -86,6 +93,108 @@ pub fn unwrap_project_key_with_ssh_identity_file(
     }
 
     Ok(secret_bytes(plaintext))
+}
+
+/// Wraps a project key into an age-encrypted invite that carries vault metadata.
+///
+/// The inner plaintext is a JSON object:
+/// `{"vault_id":"…","relay_url":"…","key":"<hex>"}` (relay_url omitted when None).
+pub fn wrap_invite_for_ssh_recipient(
+    project_key: &SecretBytes,
+    vault_id: &str,
+    relay_url: Option<&str>,
+    recipient_public_key: &str,
+) -> Result<Vec<u8>, WrappingError> {
+    let key_hex = hex::encode(project_key.expose_secret());
+    let json = match relay_url {
+        Some(url) => {
+            format!(r#"{{"vault_id":"{vault_id}","relay_url":"{url}","key":"{key_hex}"}}"#)
+        }
+        None => format!(r#"{{"vault_id":"{vault_id}","key":"{key_hex}"}}"#),
+    };
+
+    let recipient: age::ssh::Recipient =
+        recipient_public_key
+            .trim()
+            .parse()
+            .map_err(|e: age::ssh::ParseRecipientKeyError| {
+                WrappingError::InvalidRecipient(format!("{e:?}"))
+            })?;
+
+    let encryptor =
+        age::Encryptor::with_recipients([&recipient as &dyn age::Recipient].into_iter())
+            .map_err(|_| WrappingError::EncryptSetup)?;
+
+    let mut output = Vec::new();
+    let mut writer = encryptor
+        .wrap_output(&mut output)
+        .map_err(|_| WrappingError::EncryptSetup)?;
+    writer
+        .write_all(json.as_bytes())
+        .map_err(|_| WrappingError::EncryptWrite)?;
+    writer.finish().map_err(|_| WrappingError::EncryptFinish)?;
+
+    Ok(output)
+}
+
+/// Decrypts an invite created by `wrap_invite_for_ssh_recipient`.
+///
+/// Supports both the new JSON format and the legacy raw-32-byte format.
+pub fn unwrap_invite_with_ssh_identity_file(
+    encrypted_invite: &[u8],
+    identity_file: &Path,
+) -> Result<InvitePayload, WrappingError> {
+    let decryptor =
+        Decryptor::new(encrypted_invite).map_err(|_| WrappingError::InvalidEncryptedInvite)?;
+
+    let file = File::open(identity_file)?;
+    let mut reader = BufReader::new(file);
+    let identity = age::ssh::Identity::from_buffer(&mut reader, None)
+        .map_err(|_| WrappingError::IdentityParse)?;
+
+    let identities = vec![&identity as &dyn age::Identity];
+    let mut decrypted_reader = decryptor
+        .decrypt(identities.into_iter())
+        .map_err(|_| WrappingError::DecryptFailure)?;
+
+    let mut plaintext = Vec::new();
+    decrypted_reader
+        .read_to_end(&mut plaintext)
+        .map_err(|_| WrappingError::DecryptFailure)?;
+
+    // Try JSON format first.
+    if let Ok(text) = std::str::from_utf8(&plaintext)
+        && let Ok(v) = serde_json::from_str::<serde_json::Value>(text)
+        && let Some(key_hex) = v.get("key").and_then(|k| k.as_str())
+        && let Ok(key_bytes) = hex::decode(key_hex)
+        && key_bytes.len() == 32
+    {
+        let vault_id = v
+            .get("vault_id")
+            .and_then(|k| k.as_str())
+            .unwrap_or("")
+            .to_string();
+        let relay_url = v
+            .get("relay_url")
+            .and_then(|k| k.as_str())
+            .map(str::to_string);
+        return Ok(InvitePayload {
+            vault_id,
+            relay_url,
+            key: secret_bytes(key_bytes),
+        });
+    }
+
+    // Legacy format: raw 32-byte key with no embedded metadata.
+    if plaintext.len() == 32 {
+        return Ok(InvitePayload {
+            vault_id: String::new(),
+            relay_url: None,
+            key: secret_bytes(plaintext),
+        });
+    }
+
+    Err(WrappingError::InvalidProjectKeySize)
 }
 
 #[cfg(test)]

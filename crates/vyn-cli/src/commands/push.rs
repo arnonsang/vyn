@@ -115,9 +115,31 @@ pub fn run() -> Result<()> {
 
 fn load_config(root: &Path) -> Result<VaultConfig> {
     let path = root.join(".vyn").join("config.toml");
-    let text = fs::read_to_string(&path)
-        .with_context(|| format!("missing or unreadable file: {}", path.display()))?;
-    toml::from_str(&text).context("invalid .vyn/config.toml format")
+    if path.exists() {
+        let text = fs::read_to_string(&path)
+            .with_context(|| format!("missing or unreadable file: {}", path.display()))?;
+        return toml::from_str(&text).context("invalid .vyn/config.toml format");
+    }
+    // Fallback: read vault_id (and optionally relay_url) from committed vyn.toml.
+    let vyn_toml = root.join("vyn.toml");
+    let text = fs::read_to_string(&vyn_toml)
+        .context("no .vyn/config.toml found; run `vyn clone` or `vyn link` first")?;
+    #[derive(serde::Deserialize)]
+    struct PublicConfig {
+        vault_id: String,
+        relay_url: Option<String>,
+    }
+    let pc: PublicConfig = toml::from_str(&text).context("invalid vyn.toml format")?;
+    let storage_provider = if pc.relay_url.is_some() {
+        "relay".to_string()
+    } else {
+        "unconfigured".to_string()
+    };
+    Ok(VaultConfig {
+        vault_id: pc.vault_id,
+        storage_provider,
+        relay_url: pc.relay_url,
+    })
 }
 
 async fn provider_for_config(config: &VaultConfig, vault_dir: &Path) -> Result<Provider> {

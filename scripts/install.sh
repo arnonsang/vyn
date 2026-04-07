@@ -65,4 +65,10 @@ fi
 chmod +x "$INSTALL_DIR/$BIN"
 
 echo "Installed $BIN to $INSTALL_DIR/$BIN"
+
+# Record install method in global config so 'vyn update' can suggest the right command.
+VYN_GLOBAL_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/vyn"
+mkdir -p "$VYN_GLOBAL_DIR"
+printf 'install_method = "binary"\n' > "$VYN_GLOBAL_DIR/global.toml"
+
 "$INSTALL_DIR/$BIN" --version
