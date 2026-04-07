@@ -12,16 +12,20 @@
   </p>
 </p>
 
+> **This project is under active development.** Until v1.0.0 is released, any version bump may include breaking changes to the CLI interface, config file format, relay protocol, or storage layout. Pin your version if you depend on stable behavior.
 
 ## Highlights
 
 - AES-256-GCM encryption for all synced blobs and manifests
 - GitHub OAuth Device Flow identity (no passwords, no manual username entry)
-- SSH-based project key sharing via age (invite files encrypted for recipient)
-- Local vault metadata under `.vyn/` (never committed to Git)
+- SSH-based project key sharing via age - invite embeds vault ID, relay URL, and key so recipients can onboard in one command
+- `vyn.toml` - non-secret public config committed to Git; enables zero-config `vyn pull` and `vyn clone`
+- One-step onboarding: `vyn clone` - finds invite, imports key, pulls all files
+- Relay inspection: `vyn relay status` and `vyn relay ls`
+- Local vault metadata under `.vyn/`
 - Diff and status against encrypted baseline
 - Self-hosted relay server with optional S3 mirroring
-- P2P module available in vyn-core (not yet exposed via CLI)
+- P2P module available in vyn-core (Soon)
 
 ## Table of Contents
 
@@ -88,14 +92,14 @@ vyn --help
 ## Quick Start
 
 ```bash
-# 1. Initialize a vault
+# 1. Initialize a vault (creates .vyn/ and a public vyn.toml then commit it!)
 vyn init my-project
 
-# 2. Configure storage (do this before auth if using relay — auth registers your identity on the relay)
+# 2. Configure storage (do this before auth if using relay, auth registers your identity on the relay)
 vyn config
 
 # 3. Authenticate: GitHub OAuth Device Flow + SSH key verification
-#    If relay storage is configured, your identity is registered on the relay automatically.
+#    Writes .vyn/identity.toml AND ~/.vyn/identity.toml (global, used by vyn clone).
 vyn auth
 
 # 4. Push encrypted state
@@ -105,9 +109,25 @@ vyn push
 vyn pull
 ```
 
+### Joining an existing vault (one step)
+
+```bash
+mkdir my-project && cd my-project
+vyn clone https://relay.example.com <vault_id>
+# Reads ~/.vyn/identity.toml, fetches invite, stores key, pulls all files.
+```
+
 ## Configuration
 
-Primary config file: `.vyn/config.toml`
+`vyn.toml` (committed to Git) - public vault config:
+
+```toml
+# vyn.toml (this file is committed to Git and contains non-secret config)
+vault_id = "<uuid>"
+relay_url = "https://relay.example.com"
+```
+
+Primary private config file: `.vyn/config.toml` (not committed):
 
 ```toml
 vault_id = "<uuid>"
@@ -251,6 +271,7 @@ Initialize a new vault in the current directory. Fails with an error if a vault 
 - Generates a random vault UUID and AES-256-GCM project key
 - Stores the project key in the OS keychain
 - Writes `.vyn/manifest.json` (initial file index) and `.vyn/config.toml`
+- Writes `vyn.toml` in the project root (contains `vault_id` only; non-secret, commit to Git)
 - Adds `.vyn/` to `.gitignore` (creates the file if absent)
 - Copies `.vynignore.example` to `.vynignore` if an example is present
 
@@ -268,7 +289,22 @@ Authenticate your local identity using GitHub OAuth and a local SSH key. Runs a 
 
    If your key is not on GitHub yet, `vyn auth` prints the key and tells you exactly where to add it.
 
-Writes `.vyn/identity.toml` on success.
+Writes `.vyn/identity.toml` (local) and `~/.vyn/identity.toml` (global). The global copy lets `vyn clone` work from any empty directory without running auth again.
+
+---
+
+#### vyn clone \<relay_url\> \<vault_id\>
+
+Clone a vault from a relay onto this machine in one step. The most convenient way to join an existing vault.
+
+- Reads `~/.vyn/identity.toml` (global identity set by any previous `vyn auth`)
+- Authenticates with the relay using your SSH key
+- Fetches and decrypts the invite for your GitHub username
+- Stores the vault project key in the OS keychain
+- Writes `.vyn/config.toml` and `vyn.toml` with correct relay URL and vault ID
+- Runs `vyn pull` automatically to download all files
+
+Requires a teammate to have run `vyn share @you` first.
 
 ---
 
@@ -328,22 +364,24 @@ Show a unified diff against the baseline manifest.
 
 #### vyn share @user
 
-Create encrypted invite files for a GitHub user so they can join the vault.
+Create an encrypted invite for a GitHub user so they can join the vault.
 
 - Fetches SSH public keys from `https://github.com/<user>.keys`
-- Wraps the project key for each key using `age`
-- Writes invite files to `.vyn/invites/<vault_id>__<user>__<index>.age`
+- Wraps the project key, vault ID, and relay URL together for each key using `age`
+- Uploads the invite ciphertext to the relay
+
+The invite embeds all connection metadata, so the recipient can run `vyn clone` or `vyn link` without needing the vault ID or relay URL separately.
 
 ---
 
-#### vyn link <vault_id>
+#### vyn link \<vault_id\>
 
 Decrypt an invite and import the project key into the keychain.
 
-- Reads invite files from `.vyn/invites/` matching `<vault_id>__<your_username>__*.age`
+- Fetches invites from the relay matching `<vault_id>__<your_username>`
 - Uses the private key path from `.vyn/identity.toml` to unwrap the invite
-- Stores the project key in the OS keychain under the linked vault ID
-- Rewrites `vault_id` in `.vyn/config.toml` to the linked vault's ID so subsequent `vyn push`/`vyn pull` targets the correct remote vault
+- Stores the project key in the OS keychain
+- Bootstraps `.vyn/config.toml` and `vyn.toml` from metadata embedded in the invite (relay URL auto-populated)
 
 ---
 
@@ -361,9 +399,19 @@ See environment variable table in [Relay Deployment](#relay-deployment).
 
 ---
 
+#### vyn relay status / vyn relay ls
+
+Relay inspection commands. Require an authenticated vault (run `vyn auth` + `vyn config` first).
+
+- `vyn relay status` - check connectivity, show identity, verify auth against the configured relay
+- `vyn relay ls` - list all vault IDs on the relay
+- `vyn relay ls <vault_id>` - list blob hashes and sizes inside a specific vault
+
+---
+
 ### Utility Commands
 
-#### vyn run -- \<cmd...\>
+#### vyn run \<cmd...\>
 
 Run a subprocess with env vars injected from `.env` files and encrypted vault blobs.
 
@@ -416,9 +464,19 @@ Rotate the project key and re-encrypt all remote state.
 - Rebuilds invite files for known teammates
 - Writes a history entry
 
+---
+
+#### vyn update
+
+Check for a newer version of `vyn` and print upgrade instructions.
+
+- Compares local version against the latest GitHub release tag
+- Detects install method (pre-built binary, `cargo install`, Docker) and prints the correct update command
+- `--check`: only check and report whether an update is available, without printing instructions
+
 ## How It Works
 
-### Auth + Share + Link Flow
+### Auth + Share + Clone Flow
 
 ```mermaid
 sequenceDiagram
@@ -427,7 +485,7 @@ sequenceDiagram
   participant GH as GitHub
   participant FS as .vyn files
   participant C2 as vyn share
-  participant C3 as vyn link
+  participant C3 as vyn clone
   participant KC as OS Keychain
 
   U->>C1: vyn auth
@@ -436,18 +494,22 @@ sequenceDiagram
   C1->>GH: GET /<username>.keys
   GH-->>C1: registered SSH public keys
   C1->>C1: ssh-keygen challenge-response (prove key ownership)
-  C1->>FS: write .vyn/identity.toml
+  C1->>FS: write .vyn/identity.toml + ~/.vyn/identity.toml
 
   U->>C2: vyn share @teammate
   C2->>KC: load project key
   C2->>GH: GET /teammate.keys
   GH-->>C2: SSH public keys
-  C2->>FS: write encrypted invites (.age)
+  C2->>C2: wrap key + vault_id + relay_url with age
+  C2->>FS: upload invite to relay
 
-  U->>C3: vyn link <vault_id>
-  C3->>FS: read invite + identity private key path
-  C3->>KC: store linked project key
-  C3->>FS: rewrite vault_id in config.toml
+  U->>C3: vyn clone <relay_url> <vault_id>
+  C3->>FS: read ~/.vyn/identity.toml
+  C3->>FS: fetch invite from relay
+  C3->>C3: decrypt invite with SSH private key
+  C3->>KC: store project key
+  C3->>FS: write .vyn/config.toml + vyn.toml
+  C3->>C3: run vyn pull
 ```
 
 ### Push/Pull with Relay Storage
@@ -500,11 +562,42 @@ Full MVP command set is implemented and tested:
 
 - Local vault lifecycle: `init`, `st`, `diff`, `config`, `doctor`
 - Sync: `push`, `pull`, `history`
-- Identity + sharing: `auth` (OAuth + SSH verify), `share`, `link`
+- Identity + sharing: `auth` (OAuth + SSH verify), `share`, `link`, `clone`
+- Key rotation: `rotate` (re-encrypts all remote state with a new project key)
+- **v0.1.3:** `clone` (one-step onboarding), `relay status`, `relay ls`, `vyn.toml` public config, `update` (version check + upgrade instructions)
 - Env management: `run`, `check`
 - Relay server: `serve` with local and S3-mirror backends
 - Docker / Docker Compose deployment ready
 
 The P2P module (`vyn-core::p2p`) is compiled into the library but not yet exposed via CLI commands.
+
+### Planned Improvements
+
+#### Security / Privacy
+- [ ] `vyn revoke @user` - remove a teammate's invite from the relay and optionally trigger key rotation; currently there is no way to un-share
+- [ ] Invite expiry - time-bound invites (`--expires 7d`) so stale entries on the relay don't accumulate
+- [ ] Relay audit log - record who authenticated and which operations ran (no plaintext logged)
+- [ ] Passphrase-protected vault - derive PK via Argon2 as an alternative to the OS keychain, so backups work without keychain access
+
+#### Onboarding / Team UX
+- [ ] `vyn whoami` - print current identity: github username, SSH key path, relay URL, vault ID
+- [ ] `vyn team` - list who has been granted access (reads invite list from relay)
+- [ ] `vyn invite` link - generate a short token URL a teammate can paste for one-click `vyn clone` (no out-of-band vault_id sharing)
+
+#### Storage / Transport
+- [ ] P2P mode - complete the `libp2p` stub with mDNS discovery + Gossipsub for zero-latency LAN sync
+- [ ] `vyn conflicts` - list and interactively resolve conflict-marker files left by `vyn pull`
+- [ ] Selective push/pull - `vyn push .env.production` / `vyn pull .env.staging` for single-file sync
+
+#### CI / Automation
+- [ ] `vyn env print` - dump decrypted key=value to stdout for CI env injection without subprocess exec
+- [ ] Non-interactive auth - `vyn auth --token <github_pat>` for headless CI environments
+- [ ] GitHub Actions action - `uses: arnonsang/vyn-action@v1` wrapping install + auth + pull
+
+#### Developer Experience
+- [ ] Shell completions - `vyn completions bash|zsh|fish` (clap can generate these)
+- [ ] `vyn config --edit` - open `.vyn/config.toml` in `$EDITOR` directly
+- [ ] Progress bars on push/pull - show bytes transferred for large blob sets (`indicatif` crate)
+- [ ] `vyn add` interactive prompt - show which files will be tracked vs. ignored before writing `.vynignore`
 
 

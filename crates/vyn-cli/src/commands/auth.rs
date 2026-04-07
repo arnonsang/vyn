@@ -8,6 +8,7 @@ use uuid::Uuid;
 
 use anyhow::{Context, Result};
 use console::style;
+use dirs;
 use reqwest::blocking::Client;
 use serde::{Deserialize, Serialize};
 use vyn_core::relay_storage::RelayStorageProvider;
@@ -87,11 +88,19 @@ pub fn run() -> Result<()> {
     let vault_dir = root.join(".vyn");
     fs::create_dir_all(&vault_dir).context("failed to create .vyn directory")?;
     let identity_path = vault_dir.join("identity.toml");
-    fs::write(
-        &identity_path,
-        toml::to_string_pretty(&identity).context("failed to encode identity config")?,
-    )
-    .with_context(|| format!("failed to write {}", identity_path.display()))?;
+    let identity_toml =
+        toml::to_string_pretty(&identity).context("failed to encode identity config")?;
+    fs::write(&identity_path, &identity_toml)
+        .with_context(|| format!("failed to write {}", identity_path.display()))?;
+
+    // Also write to ~/.vyn/identity.toml as a global identity for `vyn clone`.
+    if let Some(home) = dirs::home_dir() {
+        let global_vyn_dir = home.join(".vyn");
+        if fs::create_dir_all(&global_vyn_dir).is_ok() {
+            let global_identity_path = global_vyn_dir.join("identity.toml");
+            let _ = fs::write(&global_identity_path, &identity_toml);
+        }
+    }
 
     // Register identity on the relay if this vault is configured for relay storage
     let relay_registered = try_register_on_relay(&vault_dir);

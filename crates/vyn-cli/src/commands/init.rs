@@ -164,6 +164,16 @@ pub fn run(name: Option<String>) -> Result<()> {
     );
     fs::write(&config_path, config).context("failed to write config.toml")?;
 
+    // Write vyn.toml to repo root (committed, no secrets -- vault_id only).
+    let vyn_toml_path = root.join("vyn.toml");
+    if !vyn_toml_path.exists() {
+        let vyn_toml = format!(
+            "# Public vault config -- commit this file.\n\
+             vault_id = \"{vault_id}\"\n"
+        );
+        fs::write(&vyn_toml_path, vyn_toml).context("failed to write vyn.toml")?;
+    }
+
     ensure_gitignore_contains_vyn(&root)?;
 
     output::print_success(&format!("vault '{project_name}' initialized"));

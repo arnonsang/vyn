@@ -12,8 +12,11 @@
 
 - **AES-256-GCM encryption** — all blobs and manifests are encrypted before leaving the machine
 - **GitHub OAuth Device Flow** — passwordless identity, no manual username entry
-- **SSH-based key sharing** — invite teammates via [age](https://age-encryption.org) using their GitHub SSH public keys
-- **Local vault** — all metadata lives in `.vyn/` and is never committed to Git
+- **SSH-based key sharing** — invite teammates via [age](https://age-encryption.org) using their GitHub SSH public keys; invite embeds vault ID, relay URL, and key so recipients can onboard with a single command
+- **`vyn.toml`** — non-secret public config committed to Git; makes `vyn clone` and CI pull work without manual configuration
+- **One-step onboarding** — `vyn clone <relay_url> <vault_id>` finds invite, imports key, and pulls files automatically
+- **Relay inspection** — `vyn relay status` and `vyn relay ls` to check connectivity and browse stored vaults/blobs
+- **Local vault** — all metadata and keys live in `.vyn/` and are never committed to Git
 - **Diff & status** — file-level and line-level diff against the encrypted baseline
 - **Self-hosted relay** — run your own gRPC relay server with optional S3 mirroring
 - **P2P stub** — `libp2p` module compiled into `vyn-core`, not yet CLI-exposed
@@ -33,7 +36,9 @@ Full MVP command set is implemented and tested:
 
 - Local vault lifecycle: `init`, `st`, `diff`, `config`, `doctor`
 - Sync: `push`, `pull`, `history`
-- Identity + sharing: `auth` (OAuth + SSH verify), `share`, `link`
+- Identity + sharing: `auth` (OAuth + SSH verify), `share`, `link`, `clone`
+- Key rotation: `rotate` (re-encrypts all remote state with a new project key)
+- **v0.1.3:** `clone` (one-step onboarding), `relay status`, `relay ls`, `vyn.toml` public config, `update` (version check + upgrade instructions)
 - Env management: `run`, `check`
 - Relay server: `serve` with local and S3-mirror backends
 - Docker / Docker Compose deployment ready

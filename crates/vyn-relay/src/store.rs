@@ -149,6 +149,44 @@ impl FileStore {
             .context("failed to write identity")
     }
 
+    /// Lists all vault IDs with a stored manifest.
+    pub fn list_vaults(&self) -> Result<Vec<String>> {
+        let dir = self.manifests_dir();
+        if !dir.exists() {
+            return Ok(Vec::new());
+        }
+        let mut vaults = Vec::new();
+        for entry in fs::read_dir(&dir).context("failed to read manifests directory")? {
+            let path = entry.context("failed to read directory entry")?.path();
+            if path.is_file()
+                && let Some(stem) = path.file_stem().and_then(|s| s.to_str())
+            {
+                vaults.push(stem.to_string());
+            }
+        }
+        Ok(vaults)
+    }
+
+    /// Lists all blob hashes stored under the global blobs directory (not vault-scoped in file store).
+    pub fn list_blobs(&self) -> Result<Vec<(String, u64)>> {
+        let dir = self.blobs_dir();
+        if !dir.exists() {
+            return Ok(Vec::new());
+        }
+        let mut blobs = Vec::new();
+        for entry in fs::read_dir(&dir).context("failed to read blobs directory")? {
+            let entry = entry.context("failed to read directory entry")?;
+            let path = entry.path();
+            if path.is_file() {
+                let size = fs::metadata(&path).map(|m| m.len()).unwrap_or(0);
+                if let Some(stem) = path.file_stem().and_then(|s| s.to_str()) {
+                    blobs.push((stem.to_string(), size));
+                }
+            }
+        }
+        Ok(blobs)
+    }
+
     pub fn get_identity(&self, user_id: &str) -> Result<Option<String>> {
         let path = self.identity_path(user_id);
         if !path.exists() {

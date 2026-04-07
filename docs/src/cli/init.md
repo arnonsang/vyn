@@ -17,8 +17,9 @@ vyn init [name]
 3. Generates a random vault UUID and 256-bit AES-256-GCM project key
 4. Stores the project key in the OS keychain under `(service=vyn, account=<vault_id>)`
 5. Writes `.vyn/manifest.json` (initial empty file index) and `.vyn/config.toml`
-6. Adds `.vyn/` to `.gitignore` (creates the file if absent)
-7. Copies `.vynignore.example` to `.vynignore` if an example is present
+6. Writes `vyn.toml` in the project root with `vault_id` (non-secret — commit this to Git)
+7. Adds `.vyn/` to `.gitignore` (creates the file if absent)
+8. Copies `.vynignore.example` to `.vynignore` if an example is present
 
 ## Example
 

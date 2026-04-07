@@ -38,6 +38,9 @@ pub fn run(opts: ConfigOptions) -> Result<()> {
     )
     .with_context(|| format!("failed to write {}", config_path.display()))?;
 
+    // Keep vyn.toml in sync with relay_url (vault_id never changes after init).
+    update_vyn_toml(&root, &config.relay_url);
+
     println!(
         "config updated: provider={} vault_id={}",
         config.storage_provider, config.vault_id
@@ -133,4 +136,29 @@ fn normalize_opt(value: String) -> Option<String> {
     } else {
         Some(trimmed.to_string())
     }
+}
+
+/// Updates the `relay_url` field in `vyn.toml` (committed file). Best-effort.
+fn update_vyn_toml(root: &Path, relay_url: &Option<String>) {
+    let path = root.join("vyn.toml");
+    if !path.exists() {
+        return;
+    }
+    let Ok(text) = fs::read_to_string(&path) else {
+        return;
+    };
+    // Remove existing relay_url line, collect the rest.
+    let mut lines: Vec<String> = text
+        .lines()
+        .filter(|l| !l.starts_with("relay_url"))
+        .map(str::to_string)
+        .collect();
+    if let Some(url) = relay_url {
+        lines.push(format!("relay_url = \"{url}\""));
+    }
+    let mut new_content = lines.join("\n");
+    if !new_content.ends_with('\n') {
+        new_content.push('\n');
+    }
+    let _ = fs::write(path, new_content);
 }

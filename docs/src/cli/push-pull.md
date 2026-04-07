@@ -38,3 +38,4 @@ vyn pull
 - Both commands require a configured storage provider (`vyn config`) and authenticated identity (`vyn auth`) when using relay storage
 - Pull overwrites local files with the remote baseline; run `vyn st` first to check for local changes
 - Encrypted blobs are cached locally in `.vyn/blobs/`; only new or changed blobs are downloaded on subsequent pulls
+- If `.vyn/config.toml` is absent, both commands fall back to reading `vyn.toml` in the project root. This makes `vyn pull` work in a freshly-cloned repository (e.g. CI) without requiring a separate config step

@@ -1,6 +1,7 @@
 pub mod add;
 pub mod auth;
 pub mod check;
+pub mod clone;
 pub mod config;
 pub mod del;
 pub mod diff;
@@ -10,8 +11,10 @@ pub mod init;
 pub mod link;
 pub mod pull;
 pub mod push;
+pub mod relay;
 pub mod rotate;
 pub mod run;
 pub mod serve;
 pub mod share;
 pub mod status;
+pub mod update;

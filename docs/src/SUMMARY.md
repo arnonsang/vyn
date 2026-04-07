@@ -22,6 +22,8 @@
 - [vyn push / pull](./cli/push-pull.md)
 - [vyn st / diff](./cli/status-diff.md)
 - [vyn share / link](./cli/share-link.md)
+- [vyn clone](./cli/clone.md)
+- [vyn relay](./cli/relay.md)
 - [vyn add / del](./cli/add-del.md)
 - [Utility Commands](./cli/utility.md)
 

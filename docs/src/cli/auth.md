@@ -28,7 +28,10 @@ If your config points to a relay (`storage_provider = "relay"`), `vyn auth` also
 
 ## Output
 
-On success, writes `.vyn/identity.toml`:
+On success, writes two identity files:
+
+- **`.vyn/identity.toml`** — local vault identity (current directory)
+- **`~/.vyn/identity.toml`** — global identity used by `vyn clone` when starting fresh in a new directory
 
 ```toml
 github_username = "your-handle"
