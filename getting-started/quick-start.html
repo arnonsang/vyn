@@ -7,7 +7,18 @@
 
 
         <!-- Custom HTML head -->
-        
+        <meta name="description" content="vyn - encrypted env/config sync CLI for teams">
+        <meta name="keywords" content="vyn, env sync, encrypted, rust, cli, devops, secrets">
+        <meta property="og:title" content="vyn docs">
+        <meta property="og:description" content="Encrypted env/config sync CLI for teams">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://arnonsang.github.io/vyn/">
+        <meta property="og:image" content="https://raw.githubusercontent.com/arnonsang/vyn/main/assets/logo_light_transparent.png">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="vyn docs">
+        <meta name="twitter:description" content="Encrypted env/config sync CLI for teams">
+        <meta name="twitter:image" content="https://raw.githubusercontent.com/arnonsang/vyn/main/assets/logo_light_transparent.png">
+
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
@@ -29,6 +40,7 @@
         <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
 
     </head>
     <body class="sidebar-visible no-js">
@@ -88,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/quick-start.html" class="active"><strong aria-hidden="true">2.</strong> Quick Start</a></li><li class="chapter-item expanded affix "><li class="part-title">Core Concepts</li><li class="chapter-item expanded "><a href="../concepts/overview.html"><strong aria-hidden="true">3.</strong> How Vyn Works</a></li><li class="chapter-item expanded "><a href="../concepts/vault.html"><strong aria-hidden="true">4.</strong> Vault Structure</a></li><li class="chapter-item expanded "><a href="../concepts/encryption.html"><strong aria-hidden="true">5.</strong> Encryption & Keys</a></li><li class="chapter-item expanded "><a href="../concepts/manifests-blobs.html"><strong aria-hidden="true">6.</strong> Manifests & Blobs</a></li><li class="chapter-item expanded affix "><li class="part-title">CLI Reference</li><li class="chapter-item expanded "><a href="../cli/init.html"><strong aria-hidden="true">7.</strong> vyn init</a></li><li class="chapter-item expanded "><a href="../cli/auth.html"><strong aria-hidden="true">8.</strong> vyn auth</a></li><li class="chapter-item expanded "><a href="../cli/config.html"><strong aria-hidden="true">9.</strong> vyn config</a></li><li class="chapter-item expanded "><a href="../cli/push-pull.html"><strong aria-hidden="true">10.</strong> vyn push / pull</a></li><li class="chapter-item expanded "><a href="../cli/status-diff.html"><strong aria-hidden="true">11.</strong> vyn st / diff</a></li><li class="chapter-item expanded "><a href="../cli/share-link.html"><strong aria-hidden="true">12.</strong> vyn share / link</a></li><li class="chapter-item expanded "><a href="../cli/add-del.html"><strong aria-hidden="true">13.</strong> vyn add / del</a></li><li class="chapter-item expanded "><a href="../cli/utility.html"><strong aria-hidden="true">14.</strong> Utility Commands</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="../configuration/files.html"><strong aria-hidden="true">15.</strong> Config Files</a></li><li class="chapter-item expanded "><a href="../configuration/env-vars.html"><strong aria-hidden="true">16.</strong> Environment Variables</a></li><li class="chapter-item expanded affix "><li class="part-title">Key Management</li><li class="chapter-item expanded "><a href="../key-management/architecture.html"><strong aria-hidden="true">17.</strong> Key Architecture</a></li><li class="chapter-item expanded "><a href="../key-management/sharing.html"><strong aria-hidden="true">18.</strong> Sharing Keys</a></li><li class="chapter-item expanded "><a href="../key-management/rotation.html"><strong aria-hidden="true">19.</strong> Key Rotation</a></li><li class="chapter-item expanded affix "><li class="part-title">Self-Hosting the Relay</li><li class="chapter-item expanded "><a href="../relay/overview.html"><strong aria-hidden="true">20.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../relay/docker.html"><strong aria-hidden="true">21.</strong> Docker Deployment</a></li><li class="chapter-item expanded "><a href="../relay/storage-backends.html"><strong aria-hidden="true">22.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="../relay/reference.html"><strong aria-hidden="true">23.</strong> Reference</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="../architecture/overview.html"><strong aria-hidden="true">24.</strong> System Design</a></li><li class="chapter-item expanded "><a href="../architecture/crates.html"><strong aria-hidden="true">25.</strong> Crate Structure</a></li><li class="chapter-item expanded "><a href="../architecture/protocol.html"><strong aria-hidden="true">26.</strong> gRPC Protocol</a></li><li class="chapter-item expanded "><a href="../architecture/contributing.html"><strong aria-hidden="true">27.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">API Reference</li><li class="chapter-item expanded "><a href="../api.html"><strong aria-hidden="true">28.</strong> Crate Docs</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Getting Started</li><li class="chapter-item expanded "><a href="../getting-started/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../getting-started/quick-start.html" class="active"><strong aria-hidden="true">2.</strong> Quick Start</a></li><li class="chapter-item expanded affix "><li class="part-title">Core Concepts</li><li class="chapter-item expanded "><a href="../concepts/overview.html"><strong aria-hidden="true">3.</strong> How Vyn Works</a></li><li class="chapter-item expanded "><a href="../concepts/vault.html"><strong aria-hidden="true">4.</strong> Vault Structure</a></li><li class="chapter-item expanded "><a href="../concepts/encryption.html"><strong aria-hidden="true">5.</strong> Encryption & Keys</a></li><li class="chapter-item expanded "><a href="../concepts/manifests-blobs.html"><strong aria-hidden="true">6.</strong> Manifests & Blobs</a></li><li class="chapter-item expanded affix "><li class="part-title">CLI Reference</li><li class="chapter-item expanded "><a href="../cli/init.html"><strong aria-hidden="true">7.</strong> vyn init</a></li><li class="chapter-item expanded "><a href="../cli/auth.html"><strong aria-hidden="true">8.</strong> vyn auth</a></li><li class="chapter-item expanded "><a href="../cli/config.html"><strong aria-hidden="true">9.</strong> vyn config</a></li><li class="chapter-item expanded "><a href="../cli/push-pull.html"><strong aria-hidden="true">10.</strong> vyn push / pull</a></li><li class="chapter-item expanded "><a href="../cli/status-diff.html"><strong aria-hidden="true">11.</strong> vyn st / diff</a></li><li class="chapter-item expanded "><a href="../cli/share-link.html"><strong aria-hidden="true">12.</strong> vyn share / link</a></li><li class="chapter-item expanded "><a href="../cli/clone.html"><strong aria-hidden="true">13.</strong> vyn clone</a></li><li class="chapter-item expanded "><a href="../cli/relay.html"><strong aria-hidden="true">14.</strong> vyn relay</a></li><li class="chapter-item expanded "><a href="../cli/add-del.html"><strong aria-hidden="true">15.</strong> vyn add / del</a></li><li class="chapter-item expanded "><a href="../cli/utility.html"><strong aria-hidden="true">16.</strong> Utility Commands</a></li><li class="chapter-item expanded affix "><li class="part-title">Configuration</li><li class="chapter-item expanded "><a href="../configuration/files.html"><strong aria-hidden="true">17.</strong> Config Files</a></li><li class="chapter-item expanded "><a href="../configuration/env-vars.html"><strong aria-hidden="true">18.</strong> Environment Variables</a></li><li class="chapter-item expanded affix "><li class="part-title">Key Management</li><li class="chapter-item expanded "><a href="../key-management/architecture.html"><strong aria-hidden="true">19.</strong> Key Architecture</a></li><li class="chapter-item expanded "><a href="../key-management/sharing.html"><strong aria-hidden="true">20.</strong> Sharing Keys</a></li><li class="chapter-item expanded "><a href="../key-management/rotation.html"><strong aria-hidden="true">21.</strong> Key Rotation</a></li><li class="chapter-item expanded affix "><li class="part-title">Self-Hosting the Relay</li><li class="chapter-item expanded "><a href="../relay/overview.html"><strong aria-hidden="true">22.</strong> Overview</a></li><li class="chapter-item expanded "><a href="../relay/docker.html"><strong aria-hidden="true">23.</strong> Docker Deployment</a></li><li class="chapter-item expanded "><a href="../relay/storage-backends.html"><strong aria-hidden="true">24.</strong> Storage Backends</a></li><li class="chapter-item expanded "><a href="../relay/reference.html"><strong aria-hidden="true">25.</strong> Reference</a></li><li class="chapter-item expanded affix "><li class="part-title">Architecture</li><li class="chapter-item expanded "><a href="../architecture/overview.html"><strong aria-hidden="true">26.</strong> System Design</a></li><li class="chapter-item expanded "><a href="../architecture/crates.html"><strong aria-hidden="true">27.</strong> Crate Structure</a></li><li class="chapter-item expanded "><a href="../architecture/protocol.html"><strong aria-hidden="true">28.</strong> gRPC Protocol</a></li><li class="chapter-item expanded "><a href="../architecture/contributing.html"><strong aria-hidden="true">29.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">API Reference</li><li class="chapter-item expanded "><a href="../api.html"><strong aria-hidden="true">30.</strong> Crate Docs</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -180,11 +192,15 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
-<h2 id="1-initialize-a-vault"><a class="header" href="#1-initialize-a-vault">1. Initialize a vault</a></h2>
+<h2 id="starting-a-new-vault"><a class="header" href="#starting-a-new-vault">Starting a new vault</a></h2>
+<h3 id="1-initialize-a-vault"><a class="header" href="#1-initialize-a-vault">1. Initialize a vault</a></h3>
 <pre><code class="language-bash">vyn init my-project
 </code></pre>
-<p>This creates a <code>.vyn/</code> directory, generates a 256-bit AES project key stored in your OS keychain, and writes an initial manifest.</p>
-<h2 id="2-configure-storage"><a class="header" href="#2-configure-storage">2. Configure storage</a></h2>
+<p>This creates a <code>.vyn/</code> directory, generates a 256-bit AES project key stored in your OS keychain, writes an initial manifest, and creates a <code>vyn.toml</code> in the project root.</p>
+<blockquote>
+<p><strong>Commit <code>vyn.toml</code></strong> — it contains only the non-secret <code>vault_id</code> and <code>relay_url</code>, making sharing easier.</p>
+</blockquote>
+<h3 id="2-configure-storage"><a class="header" href="#2-configure-storage">2. Configure storage</a></h3>
 <p>Run the interactive config wizard:</p>
 <pre><code class="language-bash">vyn config
 </code></pre>
@@ -198,7 +214,7 @@ vyn config --provider relay --relay-url https://relay.example.com --non-interact
 <blockquote>
 <p><strong>Note:</strong> Configure storage before running <code>vyn auth</code> if you are using relay storage. Auth registers your identity on the relay.</p>
 </blockquote>
-<h2 id="3-authenticate"><a class="header" href="#3-authenticate">3. Authenticate</a></h2>
+<h3 id="3-authenticate"><a class="header" href="#3-authenticate">3. Authenticate</a></h3>
 <pre><code class="language-bash">vyn auth
 </code></pre>
 <p>This runs a 3-step flow:</p>
@@ -207,20 +223,39 @@ vyn config --provider relay --relay-url https://relay.example.com --non-interact
 <li>SSH key detection — finds <code>~/.ssh/id_ed25519</code> or <code>~/.ssh/id_rsa</code> automatically.</li>
 <li>SSH challenge-response — proves you hold the private key matching your GitHub-registered public key.</li>
 </ol>
-<p>On success, writes <code>.vyn/identity.toml</code>.</p>
-<h2 id="4-push"><a class="header" href="#4-push">4. Push</a></h2>
+<p>On success, writes <code>.vyn/identity.toml</code> and <code>~/.vyn/identity.toml</code> (global, used by <code>vyn clone</code>).</p>
+<h3 id="4-push"><a class="header" href="#4-push">4. Push</a></h3>
 <pre><code class="language-bash">vyn push
 </code></pre>
 <p>Encrypts tracked files and uploads encrypted blobs + manifest to the configured storage.</p>
-<h2 id="5-pull"><a class="header" href="#5-pull">5. Pull</a></h2>
+<h3 id="5-pull"><a class="header" href="#5-pull">5. Pull</a></h3>
 <pre><code class="language-bash">vyn pull
 </code></pre>
 <p>Downloads the encrypted manifest and blobs, decrypts in memory, and writes plaintext files to disk.</p>
+<hr />
+<h2 id="joining-an-existing-vault"><a class="header" href="#joining-an-existing-vault">Joining an existing vault</a></h2>
+<p>The fastest path when a teammate has already shared the vault with you:</p>
+<pre><code class="language-bash"># Clone from a relay — fetches your invite, stores the key, pulls all files
+vyn clone https://relay.example.com &lt;vault_id&gt;
+</code></pre>
+<p><code>vyn clone</code> requires <code>vyn auth</code> to have been run at least once on this machine (reads <code>~/.vyn/identity.toml</code>).</p>
+<h3 id="manual-join-relay-invite-via-vyn-share--vyn-link"><a class="header" href="#manual-join-relay-invite-via-vyn-share--vyn-link">Manual join (relay invite via <code>vyn share</code> / <code>vyn link</code>)</a></h3>
+<pre><code class="language-bash"># On your machine (recipient)
+vyn auth                          # register your GitHub identity if not yet done
+
+# On the vault owner's machine
+vyn share @you                    # uploads an encrypted invite to the relay
+
+# Back on your machine
+vyn link &lt;vault_id&gt;               # fetches the invite, imports the key, bootstraps config
+vyn pull                          # download and decrypt all files
+</code></pre>
 <hr />
 <h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
 <ul>
 <li>Run <code>vyn st</code> to see local changes against the baseline</li>
 <li>Run <code>vyn diff</code> to inspect line-level changes</li>
+<li>Inspect your relay: <code>vyn relay status</code> / <code>vyn relay ls</code></li>
 <li>Share the vault with a teammate: <code>vyn share @teammate</code></li>
 <li>See all commands in the <a href="../cli/init.html">CLI Reference</a></li>
 </ul>
