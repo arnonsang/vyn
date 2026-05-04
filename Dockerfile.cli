@@ -1,0 +1,21 @@
+# syntax=docker/dockerfile:1
+# Builds the vyn CLI binary inside Docker and copies it to /output.
+# Usage:
+#   docker build -f Dockerfile.cli -t vyn-cli-builder .
+#   docker run --rm -v "$HOME/.local/bin:/output" vyn-cli-builder
+# The binary will be placed at $HOME/.local/bin/vyn (ensure that dir is in PATH).
+
+FROM rust:1-alpine AS builder
+RUN apk add --no-cache musl-dev pkgconf openssl-dev openssl-libs-static
+
+WORKDIR /app
+COPY Cargo.toml Cargo.lock ./
+COPY crates ./crates
+COPY proto ./proto
+
+RUN cargo build --release --bin vyn
+
+FROM alpine:3 AS export
+COPY --from=builder /app/target/release/vyn /vyn
+
+ENTRYPOINT ["/bin/sh", "-c", "cp /vyn /output/vyn && echo 'vyn installed to /output/vyn' && /output/vyn --version"]

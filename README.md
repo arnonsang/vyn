@@ -34,6 +34,7 @@
   - [Option A: Install from crates.io (recommended)](#option-a-install-from-cratesio-recommended)
   - [Option B: Pre-built binary](#option-b-pre-built-binary)
   - [Option C: Build from source](#option-c-build-from-source)
+  - [Uninstall](#uninstall)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
 - [Relay Deployment](#relay-deployment)
@@ -82,11 +83,52 @@ Download `vyn-x86_64-pc-windows-msvc.zip` from [releases](https://github.com/arn
 
 ### Option C: Build from source
 
+**With Rust toolchain**
+
 ```bash
 git clone https://github.com/arnonsang/vyn.git
 cd vyn
 cargo install --path crates/vyn-cli
 vyn --help
+```
+
+**Via Docker**
+
+Compiles from source inside Docker and copies the binary to your host.
+
+```bash
+git clone https://github.com/arnonsang/vyn.git
+cd vyn
+docker build -f Dockerfile.cli -t vyn-cli-builder .
+docker run --rm -v "$HOME/.local/bin:/output" vyn-cli-builder
+```
+
+Make sure `~/.local/bin` is in your `PATH`, then verify:
+
+```bash
+vyn --help
+```
+
+To update, re-pull and rebuild:
+
+```bash
+git -C vyn pull
+docker build -f Dockerfile.cli -t vyn-cli-builder .
+docker run --rm -v "$HOME/.local/bin:/output" vyn-cli-builder
+```
+
+### Uninstall
+
+Detects how `vyn` was installed and removes the binary and global config.
+
+```bash
+curl -fsSL https://github.com/arnonsang/vyn/releases/latest/download/uninstall.sh | sh
+```
+
+or with wget:
+
+```bash
+wget -qO- https://github.com/arnonsang/vyn/releases/latest/download/uninstall.sh | sh
 ```
 
 ## Quick Start
