@@ -1,18 +1,6 @@
-# vyn ignore rules example, processed by `ignore` crate
+# vyn opt-in model: everything is ignored unless explicitly included.
+# Add '!pattern' lines below to track additional files.
 
-## Ignore local artifacts and build outputs
-.vyn/
-.git/
-target/
+# Ignore everything by default
+*
 
-## Common local env files you may not want to sync
-.env.local
-.env.*.local
-
-## Temporary files
-*.tmp
-*.swp
- 
- ## Dir
- crates/
- proto/

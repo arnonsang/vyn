@@ -37,10 +37,9 @@ pub fn run(vault_id: String) -> Result<()> {
     let runtime = tokio::runtime::Runtime::new().context("failed to create tokio runtime")?;
     runtime.block_on(async {
         let provider = RelayStorageProvider::new(relay_url);
-        provider
-            .authenticate_with_identity(&vault_dir)
-            .await
-            .context("relay authentication failed (run `vyn auth` first)")?;
+        let spinner = output::new_spinner("authenticating with relay...");
+        provider.authenticate_with_identity(&vault_dir).await?;
+        output::finish_progress(&spinner, "authenticated");
 
         let spinner = output::new_spinner("fetching invite from relay…");
         let invites = provider
@@ -138,5 +137,5 @@ fn load_relay_url(root: &Path) -> Result<String> {
         .with_context(|| format!("missing or unreadable file: {}", config_path.display()))?;
     let cfg: VaultConfig = toml::from_str(&text).context("invalid .vyn/config.toml format")?;
     cfg.relay_url
-        .context("missing `relay_url` in .vyn/config.toml — run `vyn config` to set it")
+        .context("missing `relay_url` in .vyn/config.toml - run `vyn config` to set it")
 }

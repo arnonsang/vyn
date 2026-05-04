@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::pin::Pin;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
@@ -16,6 +16,7 @@ use crate::proto::*;
 use crate::store::{FileStore, sanitize_id};
 
 const CHALLENGE_TTL: Duration = Duration::from_secs(60);
+const SESSION_TTL: Duration = Duration::from_secs(86400);
 
 type ChallengeMap = Arc<RwLock<HashMap<String, (Vec<u8>, Instant)>>>;
 
@@ -23,7 +24,7 @@ type ChallengeMap = Arc<RwLock<HashMap<String, (Vec<u8>, Instant)>>>;
 pub struct RelayService {
     store: FileStore,
     challenges: ChallengeMap,
-    sessions: Arc<RwLock<HashSet<String>>>,
+    sessions: Arc<RwLock<HashMap<String, Instant>>>,
 }
 
 impl RelayService {
@@ -31,13 +32,16 @@ impl RelayService {
         Self {
             store,
             challenges: Arc::new(RwLock::new(HashMap::new())),
-            sessions: Arc::new(RwLock::new(HashSet::new())),
+            sessions: Arc::new(RwLock::new(HashMap::new())),
         }
     }
 }
 
 #[allow(clippy::result_large_err)]
-fn require_auth<T>(request: &Request<T>, sessions: &HashSet<String>) -> Result<(), Status> {
+fn require_auth<T>(
+    request: &Request<T>,
+    sessions: &HashMap<String, Instant>,
+) -> Result<(), Status> {
     // When the test-bypass-auth feature is enabled, allow a magic token so
     // integration tests can exercise storage without a real SSH key setup.
     #[cfg(feature = "test-bypass-auth")]
@@ -55,10 +59,9 @@ fn require_auth<T>(request: &Request<T>, sessions: &HashSet<String>) -> Result<(
         .get("x-vyn-token")
         .and_then(|v| v.to_str().ok())
         .ok_or_else(|| Status::unauthenticated("missing x-vyn-token header"))?;
-    if sessions.contains(token) {
-        Ok(())
-    } else {
-        Err(Status::unauthenticated("invalid or expired token"))
+    match sessions.get(token) {
+        Some(issued_at) if issued_at.elapsed() < SESSION_TTL => Ok(()),
+        Some(_) | None => Err(Status::unauthenticated("invalid or expired token")),
     }
 }
 
@@ -119,7 +122,10 @@ impl VynRelay for RelayService {
                 .fill(&mut raw)
                 .map_err(|_| Status::internal("failed to generate session token"))?;
             let tok: String = raw.iter().map(|b| format!("{b:02x}")).collect();
-            self.sessions.write().await.insert(tok.clone());
+            self.sessions
+                .write()
+                .await
+                .insert(tok.clone(), Instant::now());
             tok
         } else {
             String::new()

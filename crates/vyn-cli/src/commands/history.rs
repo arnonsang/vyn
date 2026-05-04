@@ -45,7 +45,7 @@ pub fn run() -> Result<()> {
         }
     }
 
-    entries.sort_by(|a, b| b.timestamp_unix.cmp(&a.timestamp_unix));
+    entries.sort_by_key(|e| std::cmp::Reverse(e.timestamp_unix));
 
     if entries.is_empty() {
         output::print_warning("no history found");

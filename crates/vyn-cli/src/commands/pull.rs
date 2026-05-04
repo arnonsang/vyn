@@ -173,10 +173,24 @@ async fn provider_for_config(config: &VaultConfig, vault_dir: &Path) -> Result<P
                 .clone()
                 .context("missing `relay_url` for storage_provider = \"relay\"")?;
             let provider = RelayStorageProvider::new(relay_url);
-            provider
-                .authenticate_with_identity(vault_dir)
-                .await
-                .context("relay authentication failed (run `vyn auth` first)")?;
+            let spinner = crate::output::new_spinner("authenticating with relay...");
+            if let Err(e) = provider.authenticate_with_identity(vault_dir).await {
+                let msg = e.to_string();
+                if msg.contains("invalid or expired token") || msg.contains("session expired") {
+                    RelayStorageProvider::clear_cached_token(vault_dir);
+                    crate::output::fail_progress(
+                        &spinner,
+                        "relay session expired - run `vyn auth` to re-authenticate",
+                    );
+                    return Err(anyhow::anyhow!(
+                        "relay session expired - run `vyn auth` to re-authenticate"
+                    ));
+                }
+                crate::output::fail_progress(&spinner, "relay authentication failed");
+                return Err(anyhow::anyhow!(e)
+                    .context("relay authentication failed (run `vyn auth` first)"));
+            }
+            crate::output::finish_progress(&spinner, "authenticated");
             Ok(Provider::Relay(provider))
         }
         "unconfigured" => anyhow::bail!(

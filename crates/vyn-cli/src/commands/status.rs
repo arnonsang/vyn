@@ -23,8 +23,10 @@ pub fn run(verbose: bool) -> Result<()> {
     let (manifest, vault_id) = load_vault_state(&root)?;
 
     let matcher = load_ignore_matcher(&root).context("failed to load ignore matcher")?;
+    let spinner = output::new_spinner("scanning files...");
     let current =
         capture_manifest(&root, &matcher).context("failed to capture current manifest")?;
+    output::finish_progress(&spinner, &format!("{} files scanned", current.files.len()));
 
     let old_by_path = map_by_path(&manifest.files);
     let new_by_path = map_by_path(&current.files);
