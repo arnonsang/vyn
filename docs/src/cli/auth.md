@@ -24,14 +24,17 @@ Your local key **must** be listed on GitHub because teammates use it to encrypt 
 
 ### With relay storage
 
-If your config points to a relay (`storage_provider = "relay"`), `vyn auth` also registers your GitHub username and SSH public key on the relay. The relay uses this registration to authenticate subsequent push/pull requests.
+If your config points to a relay (`storage_provider = "relay"`), `vyn auth` also registers your GitHub username and SSH public key on the relay, then caches a session token to `.vyn/session.token`. Subsequent commands (`push`, `pull`, `st`, etc.) reuse this token and skip the SSH signing step entirely.
+
+Session tokens expire after 24 hours (relay-enforced). When a token expires, the next command will prompt you to run `vyn auth` again.
 
 ## Output
 
-On success, writes two identity files:
+On success, writes identity files and a session token:
 
-- **`.vyn/identity.toml`** — local vault identity (current directory)
-- **`~/.vyn/identity.toml`** — global identity used by `vyn clone` when starting fresh in a new directory
+- **`.vyn/identity.toml`** - local vault identity (current directory)
+- **`~/.vyn/identity.toml`** - global identity used by `vyn clone` when starting fresh in a new directory
+- **`.vyn/session.token`** - cached relay session token (`0600` permissions, 24h TTL)
 
 ```toml
 github_username = "your-handle"

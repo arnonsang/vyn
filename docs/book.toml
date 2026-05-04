@@ -6,7 +6,7 @@ src = "src"
 
 [output.html]
 theme = "theme"
-site-url = "/vyn/"
+site-url = "/"
 git-repository-url = "https://github.com/arnonsang/vyn"
 edit-url-template = "https://github.com/arnonsang/vyn/edit/main/docs/src/{path}"
 additional-js = ["mermaid.min.js", "mermaid-init.js"]

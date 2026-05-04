@@ -4,10 +4,10 @@ The vyn relay is a **self-hosted gRPC server** that stores encrypted blobs and m
 
 ## Key properties
 
-- **Zero-knowledge** — the relay stores only ciphertext; it cannot read your files or project key
-- **Authentication** — clients authenticate via SSH challenge-response (registered during `vyn auth`)
-- **Optional S3 mirror** — blobs can be mirrored to S3/R2 for durability
-- **Single binary** — run via `vyn serve --relay` (same binary as the CLI)
+- **Zero-knowledge** - the relay stores only ciphertext; it cannot read your files or project key
+- **Authentication** - clients authenticate via SSH challenge-response (registered during `vyn auth`); session tokens are cached client-side and expire after 24h
+- **Optional S3 mirror** - blobs can be mirrored to S3/R2 for durability
+- **Single binary** - run via `vyn serve --relay` (same binary as the CLI)
 
 ## Running the relay
 
@@ -20,8 +20,32 @@ vyn serve --relay \
   --port 50051 \
   --data-dir ./.vyn-relay \
   --s3-bucket my-vyn-bucket \
-  --s3-region us-east-1
+  --s3-region us-east-1 \
+  --s3-endpoint https://s3.us-east-1.amazonaws.com \
+  --s3-prefix vyn
 ```
+
+## Environment variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `VYN_RELAY_PORT` | `50051` | Listening port |
+| `VYN_RELAY_DATA_DIR` | `./.vyn-relay` | Local persistence directory |
+| `VYN_RELAY_S3_BUCKET` | *(none)* | S3 mirror bucket (optional) |
+| `VYN_RELAY_S3_REGION` | *(none)* | S3 region (required if bucket set) |
+| `VYN_RELAY_S3_ENDPOINT` | *(none)* | Custom S3 endpoint (optional) |
+| `VYN_RELAY_S3_PREFIX` | *(none)* | Key prefix inside bucket (optional) |
+
+CLI flags override environment variables; environment variables override defaults.
+
+## Backend modes
+
+| Mode | How to enable | Write | Read | Best fit |
+|---|---|---|---|---|
+| local-only | `vyn serve --relay --data-dir ...` | Persist to relay volume | Read from relay volume | Simplest self-host |
+| local + S3 mirror | add `--s3-bucket` + `--s3-region` | Persist locally, mirror to S3 | Local cache; fallback to S3 | Durability + cloud copy |
+
+If S3 is unavailable the relay falls back to local persistence automatically.
 
 ## Relay data layout
 

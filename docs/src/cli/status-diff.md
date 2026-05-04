@@ -49,4 +49,5 @@ vyn diff [file]
 **Notes:**
 - Binary files are shown as a size-change summary: `Binary file .env.db changed (512 -> 1024 bytes)`
 - Returns an error if the specified file is not tracked in the baseline manifest
-- The diff compares against `.vyn/manifest.json` — the state at the last `vyn push` or `vyn pull`
+- The diff compares against `.vyn/manifest.json` - the state at the last `vyn push` or `vyn pull`
+- Only files matching `.vynignore` opt-in patterns are scanned; `vyn st` shows a "scanning files..." progress indicator while walking the tracked set

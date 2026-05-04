@@ -108,7 +108,7 @@ Options:
 
 ```bash
 vyn update
-# vyn v0.1.2 is installed. v0.1.3 is available.
+# vyn v0.1.3 is installed. v0.1.4 is available.
 #
 # Run the following to update:
 #   curl -fsSL https://github.com/arnonsang/vyn/releases/latest/download/install.sh | sh
@@ -116,5 +116,5 @@ vyn update
 
 ```bash
 vyn update --check
-# vyn v0.1.2 is installed. v0.1.3 is available.
+# vyn v0.1.3 is installed. v0.1.4 is available.
 ```

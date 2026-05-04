@@ -36,6 +36,8 @@ vyn pull
 ## Notes
 
 - Both commands require a configured storage provider (`vyn config`) and authenticated identity (`vyn auth`) when using relay storage
+- After `vyn auth`, subsequent push/pull reuse the cached session token in `.vyn/session.token` - no SSH signing on every command
+- If the session token is expired (24h TTL), the command prints a message and asks you to run `vyn auth` again
 - Pull overwrites local files with the remote baseline; run `vyn st` first to check for local changes
 - Encrypted blobs are cached locally in `.vyn/blobs/`; only new or changed blobs are downloaded on subsequent pulls
-- If `.vyn/config.toml` is absent, both commands fall back to reading `vyn.toml` in the project root. This makes `vyn pull` work in a freshly-cloned repository (e.g. CI) without requiring a separate config step
+- If `.vyn/config.toml` is absent, both commands fall back to reading `vyn.toml` in the project root; makes `vyn pull` work in a freshly-cloned repo (e.g. CI) without extra setup
