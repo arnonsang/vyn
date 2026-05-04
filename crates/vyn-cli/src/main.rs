@@ -223,7 +223,7 @@ fn detect_and_store_install_method() {
         let exe_str = exe.to_string_lossy().to_lowercase();
         if exe_str.contains(".cargo/bin") || exe_str.contains(".cargo\\bin") {
             Some("cargo".to_string())
-        } else if exe_str.contains("/usr/local/bin") {
+        } else if exe_str.contains("/usr/local/bin") || exe_str.contains("/.local/bin") {
             Some("binary".to_string())
         } else {
             None

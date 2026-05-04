@@ -82,4 +82,5 @@ jobs:
           files: |
             vyn-*
             scripts/install.sh
+            scripts/uninstall.sh
           generate_release_notes: true
