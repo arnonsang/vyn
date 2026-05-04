@@ -44,7 +44,7 @@ pub fn run(user: String) -> Result<()> {
     let relay_url = config
         .relay_url
         .clone()
-        .context("missing `relay_url` in .vyn/config.toml — run `vyn config` to set it")?;
+        .context("missing `relay_url` in .vyn/config.toml - run `vyn config` to set it")?;
 
     if config.storage_provider != "relay" {
         anyhow::bail!(
@@ -57,10 +57,9 @@ pub fn run(user: String) -> Result<()> {
     runtime.block_on(async {
         let relay_url_opt = Some(relay_url.as_str());
         let provider = RelayStorageProvider::new(relay_url.clone());
-        provider
-            .authenticate_with_identity(&vault_dir)
-            .await
-            .context("relay authentication failed (run `vyn auth` first)")?;
+        let spinner = output::new_spinner("authenticating with relay...");
+        provider.authenticate_with_identity(&vault_dir).await?;
+        output::finish_progress(&spinner, "authenticated");
 
         let spinner2 = output::new_spinner(&format!("uploading invite(s) for @{username}…"));
         let mut uploaded = 0usize;

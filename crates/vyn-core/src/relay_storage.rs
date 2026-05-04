@@ -78,6 +78,17 @@ impl RelayStorageProvider {
     /// Register identity on the relay (idempotent) then authenticate.
     /// `vault_dir` is the `.vyn/` directory (contains `identity.toml`).
     pub async fn authenticate_with_identity(&self, vault_dir: &Path) -> StorageResult<()> {
+        // Check for a cached session token first.
+        let token_path = vault_dir.join("session.token");
+        if token_path.exists() {
+            let cached = std::fs::read_to_string(&token_path).unwrap_or_default();
+            let cached = cached.trim().to_string();
+            if !cached.is_empty() {
+                *self.token.write().await = Some(cached);
+                return Ok(());
+            }
+        }
+
         let identity = load_identity(vault_dir)?;
         let private_key_path = identity.ssh_private_key.clone();
         let public_key_path = identity.ssh_public_key.clone();
@@ -95,7 +106,18 @@ impl RelayStorageProvider {
         self.authenticate(&user_id, move |nonce| {
             sign_nonce_with_ssh_key(nonce, Path::new(&private_key_path2))
         })
-        .await
+        .await?;
+
+        // Cache the session token for future runs.
+        if let Some(ref tok) = *self.token.read().await {
+            let _ = write_token_file(&token_path, tok);
+        }
+        Ok(())
+    }
+
+    pub fn clear_cached_token(vault_dir: &Path) {
+        let token_path = vault_dir.join("session.token");
+        let _ = std::fs::remove_file(token_path);
     }
 
     async fn ensure_identity_registered(
@@ -321,6 +343,16 @@ fn parse_toml_string(text: &str, key: &str) -> Option<String> {
         }
     }
     None
+}
+
+fn write_token_file(path: &Path, token: &str) -> std::io::Result<()> {
+    std::fs::write(path, token)?;
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o600))?;
+    }
+    Ok(())
 }
 
 fn sign_nonce_with_ssh_key(nonce: &[u8], private_key: &Path) -> StorageResult<String> {
