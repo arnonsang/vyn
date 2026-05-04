@@ -200,16 +200,18 @@
 <a href="https://github.com/arnonsang/vyn/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="license" /></a></p>
 <h2 id="highlights"><a class="header" href="#highlights">Highlights</a></h2>
 <ul>
-<li><strong>AES-256-GCM encryption</strong> — all blobs and manifests are encrypted before leaving the machine</li>
-<li><strong>GitHub OAuth Device Flow</strong> — passwordless identity, no manual username entry</li>
-<li><strong>SSH-based key sharing</strong> — invite teammates via <a href="https://age-encryption.org">age</a> using their GitHub SSH public keys; invite embeds vault ID, relay URL, and key so recipients can onboard with a single command</li>
-<li><strong><code>vyn.toml</code></strong> — non-secret public config committed to Git; makes <code>vyn clone</code> and CI pull work without manual configuration</li>
-<li><strong>One-step onboarding</strong> — <code>vyn clone &lt;relay_url&gt; &lt;vault_id&gt;</code> finds invite, imports key, and pulls files automatically</li>
-<li><strong>Relay inspection</strong> — <code>vyn relay status</code> and <code>vyn relay ls</code> to check connectivity and browse stored vaults/blobs</li>
-<li><strong>Local vault</strong> — all metadata and keys live in <code>.vyn/</code> and are never committed to Git</li>
-<li><strong>Diff &amp; status</strong> — file-level and line-level diff against the encrypted baseline</li>
-<li><strong>Self-hosted relay</strong> — run your own gRPC relay server with optional S3 mirroring</li>
-<li><strong>P2P stub</strong> — <code>libp2p</code> module compiled into <code>vyn-core</code>, not yet CLI-exposed</li>
+<li><strong>AES-256-GCM encryption</strong> - all blobs and manifests are encrypted before leaving the machine</li>
+<li><strong>GitHub OAuth Device Flow</strong> - passwordless identity, no manual username entry</li>
+<li><strong>SSH-based key sharing</strong> - invite teammates via <a href="https://age-encryption.org">age</a> using their GitHub SSH public keys; invite embeds vault ID, relay URL, and key so recipients can onboard with a single command</li>
+<li><strong><code>vyn.toml</code></strong> - non-secret public config committed to Git; makes <code>vyn clone</code> and CI pull work without manual configuration</li>
+<li><strong>One-step onboarding</strong> - <code>vyn clone &lt;relay_url&gt; &lt;vault_id&gt;</code> finds invite, imports key, and pulls files automatically</li>
+<li><strong>Relay session token caching</strong> - auth once with <code>vyn auth</code>, subsequent commands reuse the cached token (24h TTL)</li>
+<li><strong>Opt-in <code>.vynignore</code></strong> - everything ignored by default; only explicitly included patterns are tracked</li>
+<li><strong>Relay inspection</strong> - <code>vyn relay status</code> and <code>vyn relay ls</code> to check connectivity and browse stored vaults/blobs</li>
+<li><strong>Local vault</strong> - all metadata and keys live in <code>.vyn/</code> and are never committed to Git</li>
+<li><strong>Diff &amp; status</strong> - file-level and line-level diff against the encrypted baseline</li>
+<li><strong>Self-hosted relay</strong> - run your own gRPC relay server with optional S3 mirroring</li>
+<li><strong>P2P stub</strong> - <code>libp2p</code> module compiled into <code>vyn-core</code>, not yet CLI-exposed</li>
 </ul>
 <h2 id="project-layout"><a class="header" href="#project-layout">Project Layout</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Crate</th><th>Description</th></tr></thead><tbody>
@@ -227,11 +229,45 @@
 <li>Identity + sharing: <code>auth</code> (OAuth + SSH verify), <code>share</code>, <code>link</code>, <code>clone</code></li>
 <li>Key rotation: <code>rotate</code> (re-encrypts all remote state with a new project key)</li>
 <li><strong>v0.1.3:</strong> <code>clone</code> (one-step onboarding), <code>relay status</code>, <code>relay ls</code>, <code>vyn.toml</code> public config, <code>update</code> (version check + upgrade instructions)</li>
+<li><strong>v0.1.4:</strong> relay session token caching (no re-auth on every command), opt-in <code>.vynignore</code> model, relay session TTL (24h), auth progress spinners on all commands</li>
 <li>Env management: <code>run</code>, <code>check</code></li>
 <li>Relay server: <code>serve</code> with local and S3-mirror backends</li>
 <li>Docker / Docker Compose deployment ready</li>
 </ul>
 <p>The P2P module (<code>vyn-core::p2p</code>) is compiled into the library but not yet exposed via CLI.</p>
+<h2 id="planned-improvements"><a class="header" href="#planned-improvements">Planned Improvements</a></h2>
+<h3 id="security--privacy"><a class="header" href="#security--privacy">Security / Privacy</a></h3>
+<ul>
+<li><code>vyn revoke @user</code> - remove a teammate's invite from the relay and optionally trigger key rotation</li>
+<li>Invite expiry - time-bound invites (<code>--expires 7d</code>) so stale entries on the relay don't accumulate</li>
+<li>Relay audit log - record who authenticated and which operations ran (no plaintext logged)</li>
+<li>Passphrase-protected vault - derive PK via Argon2 as an alternative to the OS keychain</li>
+</ul>
+<h3 id="onboarding--team-ux"><a class="header" href="#onboarding--team-ux">Onboarding / Team UX</a></h3>
+<ul>
+<li><code>vyn whoami</code> - print current identity: github username, SSH key path, relay URL, vault ID</li>
+<li><code>vyn team</code> - list who has been granted access (reads invite list from relay)</li>
+<li><code>vyn invite</code> link - generate a short token URL a teammate can paste for one-click <code>vyn clone</code></li>
+</ul>
+<h3 id="storage--transport"><a class="header" href="#storage--transport">Storage / Transport</a></h3>
+<ul>
+<li>P2P mode - complete the <code>libp2p</code> stub with mDNS discovery + Gossipsub for zero-latency LAN sync</li>
+<li><code>vyn conflicts</code> - list and interactively resolve conflict-marker files left by <code>vyn pull</code></li>
+<li>Selective push/pull - <code>vyn push .env.production</code> / <code>vyn pull .env.staging</code> for single-file sync</li>
+</ul>
+<h3 id="ci--automation"><a class="header" href="#ci--automation">CI / Automation</a></h3>
+<ul>
+<li><code>vyn env print</code> - dump decrypted key=value to stdout for CI env injection without subprocess exec</li>
+<li>Non-interactive auth - <code>vyn auth --token &lt;github_pat&gt;</code> for headless CI environments</li>
+<li>GitHub Actions action - <code>uses: arnonsang/vyn-action@v1</code> wrapping install + auth + pull</li>
+</ul>
+<h3 id="developer-experience"><a class="header" href="#developer-experience">Developer Experience</a></h3>
+<ul>
+<li>Shell completions - <code>vyn completions bash|zsh|fish</code></li>
+<li><code>vyn config --edit</code> - open <code>.vyn/config.toml</code> in <code>$EDITOR</code> directly</li>
+<li>Progress bars on push/pull - show bytes transferred for large blob sets</li>
+<li><code>vyn add</code> interactive prompt - show which files will be tracked vs. ignored before writing <code>.vynignore</code></li>
+</ul>
 
                     </main>
 

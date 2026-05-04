@@ -195,10 +195,10 @@
 <p>The vyn relay is a <strong>self-hosted gRPC server</strong> that stores encrypted blobs and manifests on behalf of vault clients. It is the recommended storage backend for teams.</p>
 <h2 id="key-properties"><a class="header" href="#key-properties">Key properties</a></h2>
 <ul>
-<li><strong>Zero-knowledge</strong> — the relay stores only ciphertext; it cannot read your files or project key</li>
-<li><strong>Authentication</strong> — clients authenticate via SSH challenge-response (registered during <code>vyn auth</code>)</li>
-<li><strong>Optional S3 mirror</strong> — blobs can be mirrored to S3/R2 for durability</li>
-<li><strong>Single binary</strong> — run via <code>vyn serve --relay</code> (same binary as the CLI)</li>
+<li><strong>Zero-knowledge</strong> - the relay stores only ciphertext; it cannot read your files or project key</li>
+<li><strong>Authentication</strong> - clients authenticate via SSH challenge-response (registered during <code>vyn auth</code>); session tokens are cached client-side and expire after 24h</li>
+<li><strong>Optional S3 mirror</strong> - blobs can be mirrored to S3/R2 for durability</li>
+<li><strong>Single binary</strong> - run via <code>vyn serve --relay</code> (same binary as the CLI)</li>
 </ul>
 <h2 id="running-the-relay"><a class="header" href="#running-the-relay">Running the relay</a></h2>
 <pre><code class="language-bash"># Basic
@@ -209,8 +209,28 @@ vyn serve --relay \
   --port 50051 \
   --data-dir ./.vyn-relay \
   --s3-bucket my-vyn-bucket \
-  --s3-region us-east-1
+  --s3-region us-east-1 \
+  --s3-endpoint https://s3.us-east-1.amazonaws.com \
+  --s3-prefix vyn
 </code></pre>
+<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment variables</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>VYN_RELAY_PORT</code></td><td><code>50051</code></td><td>Listening port</td></tr>
+<tr><td><code>VYN_RELAY_DATA_DIR</code></td><td><code>./.vyn-relay</code></td><td>Local persistence directory</td></tr>
+<tr><td><code>VYN_RELAY_S3_BUCKET</code></td><td><em>(none)</em></td><td>S3 mirror bucket (optional)</td></tr>
+<tr><td><code>VYN_RELAY_S3_REGION</code></td><td><em>(none)</em></td><td>S3 region (required if bucket set)</td></tr>
+<tr><td><code>VYN_RELAY_S3_ENDPOINT</code></td><td><em>(none)</em></td><td>Custom S3 endpoint (optional)</td></tr>
+<tr><td><code>VYN_RELAY_S3_PREFIX</code></td><td><em>(none)</em></td><td>Key prefix inside bucket (optional)</td></tr>
+</tbody></table>
+</div>
+<p>CLI flags override environment variables; environment variables override defaults.</p>
+<h2 id="backend-modes"><a class="header" href="#backend-modes">Backend modes</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Mode</th><th>How to enable</th><th>Write</th><th>Read</th><th>Best fit</th></tr></thead><tbody>
+<tr><td>local-only</td><td><code>vyn serve --relay --data-dir ...</code></td><td>Persist to relay volume</td><td>Read from relay volume</td><td>Simplest self-host</td></tr>
+<tr><td>local + S3 mirror</td><td>add <code>--s3-bucket</code> + <code>--s3-region</code></td><td>Persist locally, mirror to S3</td><td>Local cache; fallback to S3</td><td>Durability + cloud copy</td></tr>
+</tbody></table>
+</div>
+<p>If S3 is unavailable the relay falls back to local persistence automatically.</p>
 <h2 id="relay-data-layout"><a class="header" href="#relay-data-layout">Relay data layout</a></h2>
 <pre><code>&lt;data-dir&gt;/
 ├── manifests/&lt;vault_id&gt;.enc

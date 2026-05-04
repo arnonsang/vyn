@@ -204,12 +204,14 @@
 <p>vyn fetches your registered public keys from <code>https://github.com/&lt;username&gt;.keys</code> and runs a local <code>ssh-keygen</code> challenge-response to prove you hold the matching private key.</p>
 <p>Your local key <strong>must</strong> be listed on GitHub because teammates use it to encrypt vault invites for you. If the key is not on GitHub yet, <code>vyn auth</code> prints the key and tells you where to add it.</p>
 <h3 id="with-relay-storage"><a class="header" href="#with-relay-storage">With relay storage</a></h3>
-<p>If your config points to a relay (<code>storage_provider = "relay"</code>), <code>vyn auth</code> also registers your GitHub username and SSH public key on the relay. The relay uses this registration to authenticate subsequent push/pull requests.</p>
+<p>If your config points to a relay (<code>storage_provider = "relay"</code>), <code>vyn auth</code> also registers your GitHub username and SSH public key on the relay, then caches a session token to <code>.vyn/session.token</code>. Subsequent commands (<code>push</code>, <code>pull</code>, <code>st</code>, etc.) reuse this token and skip the SSH signing step entirely.</p>
+<p>Session tokens expire after 24 hours (relay-enforced). When a token expires, the next command will prompt you to run <code>vyn auth</code> again.</p>
 <h2 id="output"><a class="header" href="#output">Output</a></h2>
-<p>On success, writes two identity files:</p>
+<p>On success, writes identity files and a session token:</p>
 <ul>
-<li><strong><code>.vyn/identity.toml</code></strong> — local vault identity (current directory)</li>
-<li><strong><code>~/.vyn/identity.toml</code></strong> — global identity used by <code>vyn clone</code> when starting fresh in a new directory</li>
+<li><strong><code>.vyn/identity.toml</code></strong> - local vault identity (current directory)</li>
+<li><strong><code>~/.vyn/identity.toml</code></strong> - global identity used by <code>vyn clone</code> when starting fresh in a new directory</li>
+<li><strong><code>.vyn/session.token</code></strong> - cached relay session token (<code>0600</code> permissions, 24h TTL)</li>
 </ul>
 <pre><code class="language-toml">github_username = "your-handle"
 ssh_private_key = "/home/you/.ssh/id_ed25519"

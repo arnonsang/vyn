@@ -227,7 +227,8 @@ Deleted   .env.old
 <ul>
 <li>Binary files are shown as a size-change summary: <code>Binary file .env.db changed (512 -&gt; 1024 bytes)</code></li>
 <li>Returns an error if the specified file is not tracked in the baseline manifest</li>
-<li>The diff compares against <code>.vyn/manifest.json</code> — the state at the last <code>vyn push</code> or <code>vyn pull</code></li>
+<li>The diff compares against <code>.vyn/manifest.json</code> - the state at the last <code>vyn push</code> or <code>vyn pull</code></li>
+<li>Only files matching <code>.vynignore</code> opt-in patterns are scanned; <code>vyn st</code> shows a "scanning files..." progress indicator while walking the tracked set</li>
 </ul>
 
                     </main>

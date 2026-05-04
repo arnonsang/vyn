@@ -219,9 +219,11 @@
 <h2 id="notes"><a class="header" href="#notes">Notes</a></h2>
 <ul>
 <li>Both commands require a configured storage provider (<code>vyn config</code>) and authenticated identity (<code>vyn auth</code>) when using relay storage</li>
+<li>After <code>vyn auth</code>, subsequent push/pull reuse the cached session token in <code>.vyn/session.token</code> - no SSH signing on every command</li>
+<li>If the session token is expired (24h TTL), the command prints a message and asks you to run <code>vyn auth</code> again</li>
 <li>Pull overwrites local files with the remote baseline; run <code>vyn st</code> first to check for local changes</li>
 <li>Encrypted blobs are cached locally in <code>.vyn/blobs/</code>; only new or changed blobs are downloaded on subsequent pulls</li>
-<li>If <code>.vyn/config.toml</code> is absent, both commands fall back to reading <code>vyn.toml</code> in the project root. This makes <code>vyn pull</code> work in a freshly-cloned repository (e.g. CI) without requiring a separate config step</li>
+<li>If <code>.vyn/config.toml</code> is absent, both commands fall back to reading <code>vyn.toml</code> in the project root; makes <code>vyn pull</code> work in a freshly-cloned repo (e.g. CI) without extra setup</li>
 </ul>
 
                     </main>
